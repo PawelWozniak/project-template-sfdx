@@ -1,7 +1,7 @@
 # template-sfdx
 
 Template project for SFDX, based on official Salesforce structure.  
-Base sfdx structure which was generated with SFDX 7.93.1 cli, Windows.
+Base sfdx structure which was generated with SFDX 7.93.1 cli, Windows.  
 `sfdx force:project:create --projectname template-sfdx`  
 [Check latest CLI changelog here.](https://github.com/forcedotcom/cli/tree/main/releasenotes)
 
@@ -20,5 +20,8 @@ Base sfdx structure which was generated with SFDX 7.93.1 cli, Windows.
 
 ### Node modules
 
-1. Lowered `eslint` from version ^7.6.0 to ^6.8.0 as depended packages gives error during `npm install` that ^6 is a highest acceptable.
+1. Lowered `eslint` from version ^7.6.0 to ^6.8.0 as dependent packages gives error during `npm install` that ^6 is the highest acceptable.
 2. Updated `@salesforce/eslint-config-lwc` to ^0.10.0
+
+### Project configuration
+1. In package.json removed `prettier --write` from lint-staged script as it was formatting files before committing to repository which caused huge diffs against org.
