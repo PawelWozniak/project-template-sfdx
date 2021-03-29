@@ -5,8 +5,34 @@
     "**/.sfdx": true
   },
 
+  "salesforcedx-vscode-core.retrieve-test-code-coverage": true,
+  "salesforcedx-vscode-core.show-cli-success-msg": false,
+  "visualforce.format.wrapLineLength": 160,
+
   "apexPMD.runOnFileOpen": true,
   "apexPMD.rulesets": [
     "./config/PMD_01_BasicSet.xml"
   ],
+  
+  "prettier.printWidth": 160,
+  "prettier.tabWidth": 4,
+
+  "uncrustify.langOverrides": {
+    "apex": "JAVA",
+	"apex-anon": "JAVA"
+  },
+
+  "[apex]": {
+    "editor.defaultFormatter": "zachflower.uncrustify"
+  },
+
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  "editor.stickyTabStops": true,
+  "editor.rulers": [
+    160
+  ]
+  
 }

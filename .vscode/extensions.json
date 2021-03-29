@@ -6,6 +6,14 @@
     "esbenp.prettier-vscode",
     "financialforce.lana",
     
-    "chuckjonas.apex-pmd"
+    "kevinjones.apex-assist",
+    "modicatech.apex-code-coverage-visualizer",
+    "zachflower.uncrustify",
+    "chuckjonas.apex-pmd",
+    "visualstudioexptteam.vscodeintellicode",
+    "bradzacher.vscode-copy-filename",
+
+    "mhutchie.git-graph",
+    "eamodio.gitlens"
   ]
 }
