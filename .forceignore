@@ -10,3 +10,13 @@ package.xml
 
 # LWC Jest
 **/__tests__/**
+
+# Ignore folders and files so you can use sfdx force:source:deploy --sourcepath "." (project folder) with multiple folders configuration 
+# More info: https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_mpd.htm
+/config
+/scripts
+/manifest
+README.md
+package.json
+sfdx-project.json
+uncrustify.cfg
