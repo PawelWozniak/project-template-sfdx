@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="PMD Only Naming Convention" xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0">
+  <description>Naming convention rules only</description>
+  <rule ref="category/apex/codestyle.xml/FieldNamingConventions" message="Field names must follow specified conventions">
+    <priority>3</priority>
+    <properties>
+      <property name="enumConstantPattern" value="[A-Z][A-Z0-9_]*" />
+      <property name="constantPattern" value="[A-Z][A-Z0-9_]*" />
+      <property name="finalPattern" value="[a-z][a-zA-Z0-9]*" />
+      <property name="staticPattern" value="[a-z][a-zA-Z0-9]*" />
+      <property name="instancePattern" value="[a-z][a-zA-Z0-9]*" />
+    </properties>
+  </rule>
+</ruleset>
