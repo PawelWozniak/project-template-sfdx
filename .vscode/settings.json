@@ -17,12 +17,19 @@
   "prettier.printWidth": 160,
   "prettier.tabWidth": 4,
 
+  "uncrustify.configPath.linux": "config/uncrustify.cfg",
+  "uncrustify.configPath.osx": "config/uncrustify.cfg",
+  "uncrustify.configPath.windows": "config/uncrustify.cfg",
   "uncrustify.langOverrides": {
     "apex": "JAVA",
     "apex-anon": "JAVA"
   },
 
   "[apex]": {
+    "editor.defaultFormatter": "zachflower.uncrustify"
+  },
+
+  "[apex-anon]": {
     "editor.defaultFormatter": "zachflower.uncrustify"
   },
 
@@ -33,6 +40,7 @@
   "editor.stickyTabStops": true,
   "editor.rulers": [
     160
-  ]
+  ],
+  "salesforcedx-vscode-core.detectConflictsAtSync": true
   
 }

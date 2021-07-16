@@ -1,8 +1,12 @@
+# .forceignore v2
 # List files or directories below to ignore them when running force:source:push, force:source:pull, and force:source:status
 # More information: https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_exclude_source.htm
 #
 
 package.xml
+
+# Ignore metadata that we don't store in GIT. Exclude from sfdx force:source:status --remote, sfdx force:source:pull
+*.profile
 
 # LWC configuration files
 **/jsconfig.json
@@ -20,3 +24,6 @@ README.md
 package.json
 sfdx-project.json
 uncrustify.cfg
+
+# Package directories - intall this metadata with unlocked packages only
+# /pkg-RuntimeErrorLogger
