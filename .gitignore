@@ -48,3 +48,4 @@ $RECYCLE.BIN/
 
 # Other
 package-lock.json
+temp/
