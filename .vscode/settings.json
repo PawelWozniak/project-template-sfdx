@@ -41,6 +41,6 @@
   "editor.rulers": [
     160
   ],
-  "salesforcedx-vscode-core.detectConflictsAtSync": true
+  "apex-assist.dependencyExplorer.ignoreTypes": "overcast.*"
   
 }
