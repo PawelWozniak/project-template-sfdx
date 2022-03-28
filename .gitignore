@@ -49,3 +49,4 @@ $RECYCLE.BIN/
 # Other
 package-lock.json
 temp/
+scripts/apex/temp.apex

@@ -41,6 +41,15 @@
   "editor.rulers": [
     160
   ],
-  "apex-assist.dependencyExplorer.ignoreTypes": "overcast.*"
+  "apex-assist.dependencyExplorer.ignoreTypes": "overcast.*",
+  "cSpell.words": [
+    "Batchable",
+    "callout",
+    "Callouts",
+    "Pricebook",
+    "queueable",
+    "SBQQ",
+    "SBQQSC"
+  ]
   
 }
