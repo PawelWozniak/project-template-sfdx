@@ -1,0 +1,50 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Undo git commit",
+            "detail": "Undo last git commit made in local repository. Use when you forgot to add some elements.",
+            "group": "build",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "command": "git",
+            "args": [
+                "reset",
+                "--soft",
+                "HEAD~1"
+            ],
+        },
+        {
+            "label": "Reauthorize sandbox",
+            "detail": "Use when you got an error that current authorization is not valid. Bug in SFDX - you need to restart computer so sfdx can reload auth info.",
+            "group": "build",
+            "type": "shell",
+            "command": "sfdx",
+            "args": [
+                "auth:web:login",
+                "--instanceurl",
+                "https://test.salesforce.com",
+                "--setalias",
+                "${input:sandboxname}"
+            ],
+            "problemMatcher": [],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        }
+    ],
+    "inputs": [
+        {
+            "id": "sandboxname",
+            "description": "Enter Sandbox Name",
+            "type": "promptString"
+        }
+    ]
+}
