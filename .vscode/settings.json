@@ -37,6 +37,10 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
 
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+
   "editor.stickyTabStops": true,
   "editor.rulers": [
     160
@@ -46,6 +50,10 @@
     "Batchable",
     "callout",
     "Callouts",
+    "FOSS",
+    "Gantt",
+    "picklist",
+    "picklists",
     "Pricebook",
     "queueable",
     "SBQQ",
