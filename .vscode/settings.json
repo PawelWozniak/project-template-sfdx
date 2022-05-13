@@ -50,6 +50,7 @@
     "Batchable",
     "callout",
     "Callouts",
+    "Datetime",
     "FOSS",
     "Gantt",
     "picklist",
@@ -57,7 +58,8 @@
     "Pricebook",
     "queueable",
     "SBQQ",
-    "SBQQSC"
+    "SBQQSC",
+    "upsert"
   ]
   
 }

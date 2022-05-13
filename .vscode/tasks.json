@@ -14,7 +14,7 @@
                 "reset",
                 "--soft",
                 "HEAD~1"
-            ],
+            ]
         },
         {
             "label": "Reauthorize sandbox",
@@ -27,7 +27,7 @@
                 "--instanceurl",
                 "https://test.salesforce.com",
                 "--setalias",
-                "${input:sandboxname}"
+                "${input:SandboxName}"
             ],
             "problemMatcher": [],
             "presentation": {
@@ -38,13 +38,50 @@
                 "showReuseMessage": true,
                 "clear": false
             }
+        },
+        {
+            "label": "Download Metadata",
+            "detail": "Use SFDX to retrive metadata with given name.",
+            "group": "build",
+            "type": "shell",
+            "command": "sfdx",
+            "args": [
+                "force:source:retrieve",
+                "-m",
+                "${input:MetadataType}:${input:MetadataName}"
+            ]
+        },
+        {
+            "label": "Activate debug logs",
+            "detail": "Activate debug logs streaming in console",
+            "group": "build",
+            "type": "shell",
+            "command": "sfdx",
+            "args": [
+                "force:apex:log:tail",
+                "--color"
+            ]
         }
     ],
     "inputs": [
         {
-            "id": "sandboxname",
+            "id": "SandboxName",
             "description": "Enter Sandbox Name",
             "type": "promptString"
+        },
+        {
+            "id": "MetadataName",
+            "description": "Enter Apex Class name",
+            "type": "promptString"
+        },
+        {
+            "id": "MetadataType",
+            "description": "Choose Metadata type to download",
+            "type": "pickString",
+            "options": [
+                "ApexClass",
+                "ApexTrigger"
+            ]
         }
     ]
 }
