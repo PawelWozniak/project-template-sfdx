@@ -7,4 +7,4 @@ var utils = require('./xUtils.js');
 
 var query = 'SELECT Id, Name, MasterLabel, Value, Category, NamespacePrefix, IsProtected FROM ExternalString'
 
-utils.queryAndSaveResults(query, 'CustomLabels.csv');
+utils.queryAndSaveResults(query, true, 'CustomLabels.csv');

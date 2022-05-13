@@ -8,4 +8,4 @@ var objectAPIName = 'ServiceAppointment';
 
 var query = 'SELECT Label, DeveloperName, DataType FROM FieldDefinition WHERE EntityDefinition.QualifiedApiName  = \'' + objectAPIName + '\''
 
-utils.queryAndSaveResults(query, objectAPIName + '_fields.csv');
+utils.queryAndSaveResults(query, true, objectAPIName + '_fields.csv');

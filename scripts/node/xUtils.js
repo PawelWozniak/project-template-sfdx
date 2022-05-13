@@ -1,15 +1,20 @@
 /**
  * Utils used in scripts
  */
+// @ts-check
 
 fs = require('fs-extra');
 const { exec } = require('child_process');
 
 
 module.exports = {
-    queryAndSaveResults: function (query, filename) {
+    queryAndSaveResults: function (query, useToolingAPI, filename) {
 
-        var command = 'sfdx force:data:soql:query --query "' + query + '" --usetoolingapi --resultformat csv'
+        var command = 'sfdx force:data:soql:query --query "' + query + '" --resultformat csv';
+        if (useToolingAPI) {
+            command += ' --usetoolingapi';
+        }
+        console.log('Command: ' + command);
         console.log('Query: ' + query);
 
         exec(command, { 'shell': 'powershell.exe' }, (error, stdout, stderr) => {
