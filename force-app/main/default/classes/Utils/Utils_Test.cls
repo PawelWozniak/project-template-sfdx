@@ -109,4 +109,20 @@ public without sharing class Utils_Test {
 		System.assertEquals(false, pvals.isEmpty(), 'Pvals should not be empty.');
 	}
 
+	@isTest
+	private static void testParseDateDDMMYYYY() {
+		Date expectedDate = Date.newInstance(2022, 04, 20);
+
+		System.assertEquals(expectedDate, utils.parseDateDDMMYYYY('20.04.2022'));
+		System.assertEquals(expectedDate, utils.parseDateDDMMYYYY('20-04-2022'));
+		System.assertEquals(expectedDate, utils.parseDateDDMMYYYY('20042022'));
+		
+		System.assertEquals(null, utils.parseDateDDMMYYYY('042022'));
+		System.assertEquals(null, utils.parseDateDDMMYYYY('20#04#2022'));
+
+		System.assertEquals(null, utils.parseDateDDMMYYYY(null));
+		System.assertEquals(null, utils.parseDateDDMMYYYY(''));
+		
+	}
+
 }

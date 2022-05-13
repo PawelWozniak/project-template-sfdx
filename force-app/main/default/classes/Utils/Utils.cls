@@ -378,4 +378,50 @@ public without sharing class Utils {
 		}
 	}
 
+	// Date and Time conversion
+	/**
+	 * @description Parse given date string.
+	 * Accepted formats 20.04.2022; 20-04-2022; 20042022
+	 */
+	public static date parseDateDDMMYYYY(String dateString) {
+		if (String.isEmpty(dateString)) {
+			return null;
+		}
+
+		List<String> dateSplit = new List<String>();
+
+		if (dateString.length() == 10) {
+			if (dateString.countMatches('.') == 2) {
+				dateSplit = dateString.split('\\.');
+			}
+			else if (dateString.countMatches('-') == 2) {
+				dateSplit = dateString.split('-');
+			}
+		}
+		else if (dateString.length() == 8) {
+			dateSplit.add(dateString.left(2));
+			dateSplit.add(dateString.mid(2, 2));
+			dateSplit.add(dateString.right(4));
+		}
+
+		if (dateSplit.isEmpty()) {
+			return null;
+		}
+
+		System.Debug(dateSplit);
+
+		Date parsedDate = Date.newInstance(Integer.valueOf(dateSplit.get(2)), Integer.valueOf(dateSplit.get(1)), Integer.valueOf(dateSplit.get(0)));
+		return parsedDate;
+	}
+
+	/**
+	 * Check if running user is Paweł Woźniak.
+	 * This method is used in case of debugging to run code only for me.
+	 * You may delete that if I am no longer working on this project.
+	 */
+	public static Boolean isPW() {
+		boolean isPW = UserInfo.getUserName().startsWith('pawel.wozniak');
+		return isPW;
+	}
+
 }
