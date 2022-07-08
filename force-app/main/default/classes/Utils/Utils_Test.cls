@@ -110,6 +110,12 @@ public without sharing class Utils_Test {
 	}
 
 	@isTest
+	private static void testGetPicklistValuesAPItoLabelMap() {
+		Map<String, String> apiToLabelMap = Utils.getPicklistValuesAPItoLabelMap('Account', 'AccountSource');
+		System.assertEquals(false, apiToLabelMap.isEmpty(), 'API to Label Map should not be empty.');
+	}
+
+	@isTest
 	private static void testParseDateDDMMYYYY() {
 		Date expectedDate = Date.newInstance(2022, 04, 20);
 
