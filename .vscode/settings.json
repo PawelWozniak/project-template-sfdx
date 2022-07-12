@@ -51,15 +51,44 @@
     "callout",
     "Callouts",
     "Datetime",
-    "FOSS",
     "Gantt",
+    "instanceof",
+    "Opps",
+    "Pardot",
     "picklist",
     "picklists",
     "Pricebook",
     "queueable",
+    "Rollup",
     "SBQQ",
     "SBQQSC",
+    "Undelete",
     "upsert"
-  ]
+  ],
+
+  "replacerules.rulesets": {
+    "🔨Fix Uncrustiy Formatter Issues":{
+        "rules": ["fixUncrustify_Assert","fixUncrustify_MapAssigment","fixUncrustify_SOQLvariableAssigment"]
+    }
+  },
+  "replacerules.rules": {
+    "fixUncrustify_Assert":{
+        "find": ".assert (",
+        "replace": ".assert(",
+        "literal": true,
+        "languages": ["apex", "apex-anon"]
+    },
+    "fixUncrustify_MapAssigment":{
+        "find": "= >",
+        "replace": "=>",
+        "literal": true,
+        "languages": ["apex", "apex-anon"]
+    },
+    "fixUncrustify_SOQLvariableAssigment":{
+        "find": "([=|IN])\\s?: (\\w)",
+        "replace": "$1 :$2",
+        "languages": ["apex", "apex-anon"]
+    }
+  }
   
 }
