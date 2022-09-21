@@ -14,8 +14,11 @@ public with sharing class Util_DebugLogTools_Test {
 		Test.setMock(HttpCalloutMock.class, new Util_DebugLogTools.sfApiResponseMock('deleteSuccessApexLogs'));
 
 		Util_DebugLogTools.deleteSuccessApexLogs(30);
+		Integer futureCalls = Limits.getFutureCalls();
 
 		Test.stopTest();
+
+		System.assert(futureCalls > 0, 'Should run future method');
 	}
 
 }

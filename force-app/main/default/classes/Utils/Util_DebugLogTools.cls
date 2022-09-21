@@ -1,3 +1,9 @@
+@SuppressWarnings('PMD.AvoidDebugStatements')
+/**
+ * @author		Paweł Woźniak
+ * @description	Utils for Debug Logs
+ */
+
 public without sharing class Util_DebugLogTools {
 
 	/**
@@ -5,23 +11,21 @@ public without sharing class Util_DebugLogTools {
 	 * @description Delete all Debug logs which are success. Use it for cleaning debug log if it is not displaying new logs anymore.
 	 * @param olderThanMinutes number of minutes to leave.
 	 * @example run as anonymous code: Util_DebugLogTools.deleteSuccessApexLogs(30);
-	 * @author Paweł Woźniak
 	 */
 	@Future(callout = true)
 	public static void deleteSuccessApexLogs(Integer olderThanMinutes) {
-		List<String> apiCallsList = new List<String> ();
 		Set<String> successStatusTranslations = new Set<String> {
 			'Success', 'SUCCESS', 'Erfolg'
-		};                                                                                  // Put all translations from your SF org. SF saves debug log in user local language.
-		List<ApexLog> ApexLoglist = [SELECT Id, StartTime, Status
-		                             FROM ApexLog
-		                             WHERE Status IN :successStatusTranslations
-		                             AND StartTime <:Datetime.now().addMinutes(-olderThanMinutes)
-		                             ORDER BY StartTime];
+		}; // Put all translations from your SF org. SF saves debug log in user local language.
+		List<ApexLog> ApexLogList = [SELECT Id, StartTime, Status
+									 FROM ApexLog
+									 WHERE Status IN :successStatusTranslations
+									 AND StartTime < :Datetime.now().addMinutes(-olderThanMinutes)
+									 ORDER BY StartTime];
 
 		Set<Id> apexLogIds = new Set<Id> ();
 
-		for (ApexLog apexLogRecord : ApexLoglist) {
+		for (ApexLog apexLogRecord : ApexLogList) {
 			apexLogIds.add(apexLogRecord.Id);
 		}
 
@@ -50,8 +54,11 @@ public without sharing class Util_DebugLogTools {
 	}
 
 	/**
-	 * @description  Split big set of Ids to small chunks. Usefull with API calls.
+	 * @description  Split big set of Ids to small chunks. Useful with API calls.
 	 * @author Paweł Woźniak
+	 * @param ids Big set od ids
+	 * @param chunkSize size of one returned chunk
+	 * @return Sets of Ids which contains defined chunk of Ids.
 	 */
 	private static List<Set<Id>> splitIdSetToChunks(Set<Id> ids, Integer chunkSize) {
 		List<Set<Id>> chunks = new List<Set<Id>> ();
@@ -80,20 +87,21 @@ public without sharing class Util_DebugLogTools {
 	}
 
 	// Calling SF API internally https://salesforce.stackexchange.com/questions/183578/how-do-i-call-the-salesforce-api-from-a-lightning-component/183692#183692
+	@SuppressWarnings('PMD.ApexSuggestUsingNamedCred')
 	private static HttpResponse callSFAPI(String apiAction, String method, String requestBody) {
-		Http h = new Http();
 		HttpRequest req = new HttpRequest();
 		req.setHeader('Authorization', 'OAuth ' + UserInfo.getSessionId());
 		req.setHeader('Authorization', 'Bearer ' + UserInfo.getSessionId());
 		req.setHeader('Accept', 'application/json');
 
-		// Workaroud for missing PATCH method in SF https://salesforce.stackexchange.com/questions/57215/how-can-i-make-a-patch-http-callout-from-apex
+		// Workaround for missing PATCH method in SF https://salesforce.stackexchange.com/questions/57215/how-can-i-make-a-patch-http-callout-from-apex
 		if (method == 'PATCH') {
 			req.setMethod('POST');
-			req.setEndpoint(Url.getOrgDomainUrl().toExternalForm() + '/services/data/v45.0' + apiAction + '?_HttpMethod=PATCH');
-		} else {
+			req.setEndpoint(Url.getOrgDomainUrl().toExternalForm() + '/services/data/v55.0' + apiAction + '?_HttpMethod=PATCH');
+		}
+		else {
 			req.setMethod(method); // POST, GET, DELETE.
-			req.setEndpoint(Url.getOrgDomainUrl().toExternalForm() + '/services/data/v45.0' + apiAction);
+			req.setEndpoint(Url.getOrgDomainUrl().toExternalForm() + '/services/data/v55.0' + apiAction);
 		}
 
 		if (method == 'POST' || method == 'PUT' || method == 'PATCH') {
@@ -113,14 +121,17 @@ public without sharing class Util_DebugLogTools {
 
 		if (res.getStatusCode() != 200 && res.getStatusCode() != 201 && res.getStatusCode() != 204) {
 			System.debug('Call failed: ' + res.getStatusCode() + ' ' + res.getStatus() + '\n' + res.getBody());
-		} else {
-			System.debug('Call succesfull: ' + res.getStatusCode() + ' ' + res.getStatus());
+		}
+		else {
+			System.debug('Call successful: ' + res.getStatusCode() + ' ' + res.getStatus());
 		}
 
 		return res;
 	}
 
-	// Mock for SFApi response. Used for test run.
+	/**
+	 * @description Mock for SFApi response. Used for test run.
+	 */
 
 	public class sfApiResponseMock implements HttpCalloutMock {
 

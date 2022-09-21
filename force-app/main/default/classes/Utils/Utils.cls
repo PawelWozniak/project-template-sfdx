@@ -4,6 +4,7 @@
  * @description	Methods that are frequently used.
  */
 
+@SuppressWarnings('PMD.ExcessivePublicCount, PMD.CyclomaticComplexity')
 public without sharing class Utils {
 
 	private static Boolean isSandbox = null;
@@ -103,14 +104,16 @@ public without sharing class Utils {
 	 * @description Use it instead of query with toLabel() to save SOQL queries in triggers.
 	 * @param objectName SF Object API name.
 	 * @param fieldName Field API name.
-	 * @return Map<String, String> 
+	 * @return Map<String, String>
 	 */
 	public static Map<String, String> getPicklistValuesAPItoLabelMap(String objectName, String fieldName) {
 		Map<String, String> picklistApiToLabelMap = new Map<String, String>();
 		Set<picklistEntryDetails> pve = getPicklistValues(objectName, fieldName);
-			for (picklistEntryDetails ped : pve) {
-				picklistApiToLabelMap.put(ped.apiName, ped.label);
-			}
+
+		for (picklistEntryDetails ped : pve) {
+			picklistApiToLabelMap.put(ped.apiName, ped.label);
+		}
+
 		return picklistApiToLabelMap;
 	}
 
@@ -140,9 +143,10 @@ public without sharing class Utils {
 	}
 
 	/**
-	 * Get set of values from list of records. Results may be used with .contains() or as input for another query.
+	 * @description Get set of values from list of records. Results may be used with .contains() or as input for another query.
 	 * @param recordsList records list from query results
 	 * @param fieldName field from which you want to make a Set of values.
+	 * @return Set Of Strings cut out from given records list.
 	 * Example usage see getSetOfAssignedPermissionSets() in this class.
 	 */
 	public static Set<String> getSetOfStrings(List<SObject> recordsList, String fieldName) {
@@ -212,8 +216,10 @@ public without sharing class Utils {
 	 * try {
 	 *     new TriggerHandlerClassName().run();
 	 * } catch (Exception ex) {
-	 *     String requestID = RuntimeErrorLog.saveException('ServiceAppointmentTH', ex.getTypeName(), null, ex);
-	 *     throw new Utils.triggerException (ex, requestID);
+	 *	Logger.error('AccountTH failed with exception.', Trigger.new, e);
+	 *	Logger.saveLog();
+	 *	throw new Utils.triggerException (e, Logger.getTransactionId());
+	 *
 	 * }
 	 */
 	public class triggerException extends Exception {
@@ -229,7 +235,7 @@ public without sharing class Utils {
 	}
 
 	/**
-	 * Throw custom Nullpointer Exception
+	 * @description Throw custom NullPointer Exception
 	 * Use it when catching NullPointerException
 	 * Example:
 	 *	catch (NullPointerException npe) {
@@ -249,6 +255,7 @@ public without sharing class Utils {
 		if (canExecuteDebug == null) {
 			canExecuteDebug = FeatureManagement.checkPermission('Can_Execute_Debug_Statement');
 		}
+
 		return canExecuteDebug;
 	}
 
@@ -308,7 +315,7 @@ public without sharing class Utils {
 	public static Set<String> getSetOfAssignedPermissionSetsToRunningUser() {
 		List<PermissionSetAssignment> assignedPermSets = [SELECT Id, PermissionSet.Name
 														  FROM PermissionSetAssignment
-														  WHERE AssigneeId = : Userinfo.getUserId()];
+														  WHERE AssigneeId = :UserInfo.getUserId()];
 
 		return getSetOfStrings(assignedPermSets, 'PermissionSet.Name');
 
@@ -438,7 +445,6 @@ public without sharing class Utils {
 	 */
 	public static void debug_sendMeEmailWithObjectAsJSON (Object anyObject) {
 
-		Messaging.reserveSingleEmailCapacity(1);
 		Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
 
 		List<String> toAddresses = new List<String> {

@@ -1,6 +1,6 @@
 /**
  * @author		Paweł Woźniak
- * @created		2021-08-12
+ * @created		2022-09-14
  * @description	Put here all constants that will be referenced in apex code.
  *              If all references in APEX code will use constants then changes in picklist will require changes only here.
  *              For picklists you need to provide API name not label.

@@ -4,6 +4,7 @@
  * @description	Trigger Handler class for object Account (Account).
  */
 
+@SuppressWarnings('PMD.EmptyStatementBlock')
 public without sharing class AccountTH extends TriggerHandler {
 
 	private List<Account> newRecords;
@@ -56,7 +57,5 @@ public without sharing class AccountTH extends TriggerHandler {
 	}
 
 	/********** Here add full logic. **********/
-
-	
 
 }

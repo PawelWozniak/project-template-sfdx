@@ -1,7 +1,7 @@
 /**
- * @author      Pawel Wozniak
+ * @author      Paweł Woźniak
  * @created     2021-07-05
- * @description Utility class which help to controll trigger recursive execution. Max trigger depth is 16.
+ * @description Utility class which help to controls trigger recursive execution. Max trigger depth is 16.
  * @url         https://www.linkedin.com/pulse/salesforce-admins-thoughts-recursion-apex-david-vickers/
  */
 public class Util_CheckRecursive {
@@ -20,13 +20,14 @@ public class Util_CheckRecursive {
 	 * @description Use this method to simplify check in triggers if such record was processed already.
 	 * Example usage:
 	 * if (!isFirstCallOf('methodName' + record.Id)) { continue; }
-	 * @param string with unique Id.
+	 * @param input string with unique Id.
 	 * @return true if such string was called for the first time. false if it is 2nd any more.
 	 */
 	public static Boolean isFirstCallOf(String input) {
 		if (iveBeenCalled(input) > 1) {
 			return false;
-		} else {
+		}
+		else {
 			return true;
 		}
 	}
@@ -138,7 +139,7 @@ public class Util_CheckRecursive {
 	public static Integer getTriggerEventCallCount (String triggerClassName) {
 		System.TriggerOperation triggerEvent = Trigger.operationType;
 		String input = triggerClassName + ':' + triggerEvent;
-		return numberofCalls(input);
+		return numberOfCalls(input);
 	}
 
 }
