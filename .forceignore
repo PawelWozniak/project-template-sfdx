@@ -18,7 +18,7 @@ package.xml
 # LWC Jest
 **/__tests__/**
 
-# Ignore folders and files so you can use sfdx force:source:deploy --sourcepath "." (project folder) with multiple folders configuration 
+# Ignore folders and files so you can use >>>sfdx force:source:deploy --checkonly --verbose --sourcepath "."<<< (project folder) with multiple folders configuration 
 # More info: https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_mpd.htm
 /config
 /scripts
@@ -29,4 +29,4 @@ sfdx-project.json
 uncrustify.cfg
 
 # Package directories - intall this metadata with unlocked packages only
-# /pkg-RuntimeErrorLogger
+/extpkg-UnofficialSF

@@ -5,6 +5,11 @@
     "**/.sfdx": true
   },
 
+  "editor.stickyTabStops": true,
+  "editor.rulers": [
+    160
+  ],
+
   "salesforcedx-vscode-core.retrieve-test-code-coverage": true,
   "salesforcedx-vscode-core.show-cli-success-msg": false,
   "visualforce.format.wrapLineLength": 160,
@@ -41,30 +46,11 @@
     "editor.defaultFormatter": "vscode.json-language-features"
   },
 
-  "editor.stickyTabStops": true,
-  "editor.rulers": [
-    160
-  ],
+  "[forcesourcemanifest]": {
+    "editor.defaultFormatter": "redhat.vscode-xml"
+  },
+
   "apex-assist.dependencyExplorer.ignoreTypes": "overcast.*",
-  "cSpell.words": [
-    "Batchable",
-    "callout",
-    "Callouts",
-    "Datetime",
-    "Gantt",
-    "instanceof",
-    "Opps",
-    "Pardot",
-    "picklist",
-    "picklists",
-    "Pricebook",
-    "queueable",
-    "Rollup",
-    "SBQQ",
-    "SBQQSC",
-    "Undelete",
-    "upsert"
-  ],
 
   "replacerules.rulesets": {
     "🔨Fix Uncrustiy Formatter Issues":{
@@ -89,6 +75,30 @@
         "replace": "$1 :$2",
         "languages": ["apex", "apex-anon"]
     }
-  }
+  },
+
+  "cSpell.words": [
+    "accs",
+    "Batchable",
+    "callout",
+    "Callouts",
+    "Datetime",
+    "Gantt",
+    "instanceof",
+    "MULTIPICKLIST",
+    "Opps",
+    "Pardot",
+    "picklist",
+    "picklists",
+    "Pricebook",
+    "queueable",
+    "Rollup",
+    "SBQQ",
+    "SBQQSC",
+    "Schedulable",
+    "SOQL",
+    "Undelete",
+    "upsert"
+  ],
   
 }

@@ -52,3 +52,4 @@ $RECYCLE.BIN/
 package-lock.json
 temp/
 scripts/apex/temp.apex
+manifest/package.xml
