@@ -10,7 +10,6 @@ Base sfdx structure which was generated with SFDX 7.93.1 cli, Windows.
 1. Install SFDX cli https://developer.salesforce.com/tools/sfdxcli
 2. Install latest LTS version of Node.js form https://nodejs.org/  
    Update global npm to latest version `npm -g install npm@latest`  
-   Check `npm version` it should be higher than 7.7.5
 3. Create folder `C:\cli_tools` add it to system PATH
 4. Download PMD from https://pmd.github.io and unzip it to `C:\cli_tools`, remove version number and leave only `pmd-bin`. Add `C:\cli_tools\pmd-bin\bin` to system PATH.
 5. Download Uncrustify https://sourceforge.net/projects/uncrustify/ and unzip it to `C:\cli_tools\uncrustify`, add it to system PATH.
@@ -26,11 +25,6 @@ Verify. Open command line ([Windows Terminal](https://www.microsoft.com/pl-pl/p/
    Check installed packages versions by `npm ls --depth=0`
 
 # Modifications of template
-
-### Node modules
-
-1. Lowered `eslint` from version ^7.6.0 to ^6.8.0 as dependent packages gives error during `npm install` that ^6 is the highest acceptable.
-2. Updated `@salesforce/eslint-config-lwc` to ^0.10.0
 
 ### Project configuration changes made
 1. In package.json removed `prettier --write` from lint-staged script as it was formatting files before committing to repository which caused huge diffs against org.
