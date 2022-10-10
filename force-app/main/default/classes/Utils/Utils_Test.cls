@@ -145,14 +145,12 @@ public without sharing class Utils_Test {
 
 		Utils.addFieldValues(acc, additionalValues);
 
-		insert acc;
-
 		System.assertEquals(acc.Name, 'MyAccount', 'Custom value should be set on account');
 	}
 
 	@isTest
 	private static void testLogSuccessAndFailedSave() {
-		List<Account> accs = TestDataFactory.createAccounts(2, null);
+		List<Account> accs = TestDataFactory.createAccounts(2, new Map<String, Object>());
 		accs[1].Name = '';
 
 		List<Database.SaveResult> saveResults = Database.update(accs, false);
@@ -178,7 +176,7 @@ public without sharing class Utils_Test {
 
 	@isTest
 	private static void testDebugSendMeEmailWithObjectAsJSON() {
-		List<Account> accs = TestDataFactory.createAccounts(1, null);
+		List<Account> accs = TestDataFactory.createAccounts(1, new Map<String, Object>());
 		try {
 			Utils.debug_sendMeEmailWithObjectAsJSON(accs[0]);
 		}
