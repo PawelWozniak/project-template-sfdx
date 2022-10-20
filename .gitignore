@@ -48,8 +48,18 @@ $RECYCLE.BIN/
 # Local environment variables
 .env
 
+# Ignore all list views as we don't want to store user's personal list views that keeps changing frequently.
+force-app/main/default/objects/*/listViews/*.listView-meta.xml
+# Do not ignore those ListViews:
+!AllAccounts.listView-meta.xml
+!AllContacts.listView-meta.xml
+!AllOpportunities.listView-meta.xml
+!AllContracts.listView-meta.xml
+
+
 # Other
 package-lock.json
 temp/
 scripts/apex/temp.apex
 manifest/package.xml
+manifest-delta/
