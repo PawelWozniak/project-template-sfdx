@@ -342,8 +342,10 @@ public without sharing class Utils {
 	 * Use with: List<Database.SaveResult> saveResults = Database.update(recordToSave, false);
 	 * @param saveResults List<Database.SaveResult> save results of given list of records
 	 * @param savedRecords List<sObject> List of records which were saved.
+	 * @return boolean Were all records saved with success? TRUE - All Succeeded, FALSE - some failed.
+	 * Use return result with Nebula Logger to log error in case of failures.
 	 */
-	public static void logSuccessAndFailedSave(List<Database.SaveResult> saveResults, List<sObject> savedRecords) {
+	public static boolean logSuccessAndFailedSaveToDebugLog(List<Database.SaveResult> saveResults, List<sObject> savedRecords) {
 
 		List<String> saveSuccess = new List<String>();
 		Map<String, List<String>> saveErrors = new Map<String, List<String>>();
@@ -351,7 +353,13 @@ public without sharing class Utils {
 		for (Integer i = 0; i < saveResults.size(); i++) {
 			Database.SaveResult saveRes = saveResults.get(i);
 			Id recordId = savedRecords.get(i).Id;
-			String recordName = String.valueOf(savedRecords.get(i)?.get('Name'));
+			String recordName = '*Missing Record Name*';
+			try {
+				recordName = String.valueOf(savedRecords.get(i).get('Name'));
+			} catch (System.SObjectException ex) {
+				Utils.notifyInDebugLog('Add >Name< to SOQL query to catch record Name and improve logs. [Utils.logSuccessAndFailedSaveToDebugLog]');
+			}
+
 			String recordString = recordId + ' ' + '"' + recordName + '"';
 
 			if (saveRes.isSuccess()) {
@@ -371,7 +379,14 @@ public without sharing class Utils {
 			}
 		}
 
-		printSaveResults(saveSuccess, saveErrors);
+		printSaveResultsInDebugLog(saveSuccess, saveErrors);
+
+		// Were all records saved with success?
+		if (saveErrors.isEmpty()) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -380,7 +395,7 @@ public without sharing class Utils {
 	 * @param saveErrors List of strings with save results error messages
 	 */
 	@SuppressWarnings('PMD.AvoidDebugStatements')
-	private static void printSaveResults(List<String> saveSuccess, Map<String, List<String>> saveErrors) {
+	private static void printSaveResultsInDebugLog(List<String> saveSuccess, Map<String, List<String>> saveErrors) {
 		if (!saveSuccess.isEmpty()) {
 			System.debug('#@# Records updated with success: ');
 
