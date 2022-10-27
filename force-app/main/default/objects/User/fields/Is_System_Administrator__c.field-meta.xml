@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Is_System_Administrator__c</fullName>
+    <description>Used in components to show section for admins only.</description>
+    <externalId>false</externalId>
+    <formula>Profile.Name = &quot;System Administrator&quot;</formula>
+    <inlineHelpText>Checked if User is an Administrator.</inlineHelpText>
+    <label>Is System Administrator</label>
+    <type>Checkbox</type>
+</CustomField>
