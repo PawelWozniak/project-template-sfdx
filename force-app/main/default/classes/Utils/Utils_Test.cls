@@ -149,12 +149,12 @@ public without sharing class Utils_Test {
 	}
 
 	@isTest
-	private static void testLogSuccessAndFailedSave() {
+	private static void testLogSuccessAndFailedSaveToDebugLog() {
 		List<Account> accs = TestDataFactory.createAccounts(2, new Map<String, Object>());
 		accs[1].Name = '';
 
 		List<Database.SaveResult> saveResults = Database.update(accs, false);
-		Utils.logSuccessAndFailedSave(saveResults, accs);
+		Utils.logSuccessAndFailedSaveToDebugLog(saveResults, accs);
 
 	}
 
