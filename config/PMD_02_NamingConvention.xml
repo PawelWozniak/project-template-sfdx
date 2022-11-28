@@ -1,8 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="PMD Only Naming Convention" xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0">
-  <description>Naming convention rules only</description>
-  <rule ref="category/apex/codestyle.xml/FieldNamingConventions" message="Field names must follow specified conventions">
+  <description>Ruleset with Naming convention rules only. For current PMD 6.52.0. </description>
+
+  <!-- ClassNamingConventions -->
+  <!-- Since 5.5.0; https://pmd.github.io/latest/pmd_rules_apex_codestyle.html#classnamingconventions -->
+  <rule ref="category/apex/codestyle.xml/ClassNamingConventions">
     <priority>3</priority>
+    <properties>
+      <property name="testClassPattern" value="[A-Z][a-zA-Z0-9_]*" />
+      <property name="abstractClassPattern" value="[A-Z][a-zA-Z0-9_]*" />
+      <property name="classPattern" value="[A-Z][a-zA-Z0-9_]*" />
+      <property name="interfacePattern" value="[A-Z][a-zA-Z0-9_]*" />
+      <property name="enumPattern" value="[A-Z][a-zA-Z0-9_]*" />
+    </properties>
+  </rule>
+
+  <!-- MethodNamingConventions -->
+  <!-- Since 5.5.0; https://pmd.github.io/latest/pmd_rules_apex_codestyle.html#methodnamingconventions -->
+  <rule ref="category/apex/codestyle.xml/MethodNamingConventions">
+    <priority>1</priority>
+    <properties>
+      <property name="testPattern" value="[a-z][a-zA-Z0-9]*" />
+      <property name="staticPattern" value="[a-z][a-zA-Z0-9]*" />
+      <property name="instancePattern" value="[a-z][a-zA-Z0-9]*" />
+    </properties>
+  </rule>
+
+  <!-- FieldNamingConventions -->
+  <!-- Since 6.15.0; https://pmd.github.io/latest/pmd_rules_apex_codestyle.html#fieldnamingconventions -->
+  <rule ref="category/apex/codestyle.xml/FieldNamingConventions" message="Field names must follow specified conventions">
+    <priority>1</priority>
     <properties>
       <property name="enumConstantPattern" value="[A-Z][A-Z0-9_]*" />
       <property name="constantPattern" value="[A-Z][A-Z0-9_]*" />
@@ -11,4 +38,35 @@
       <property name="instancePattern" value="[a-z][a-zA-Z0-9]*" />
     </properties>
   </rule>
+
+  <!-- FormalParameterNamingConventions -->
+  <!-- Since 6.15.0; https://pmd.github.io/latest/pmd_rules_apex_codestyle.html#formalparameternamingconventions -->
+  <rule ref="category/apex/codestyle.xml/FormalParameterNamingConventions">
+    <priority>1</priority>
+    <properties>
+      <property name="finalMethodParameterPattern" value="[a-z][a-zA-Z0-9]*" />
+      <property name="methodParameterPattern" value="[a-z][a-zA-Z0-9]*" />
+    </properties>
+  </rule>
+
+  <!-- LocalVariableNamingConventions -->
+  <!-- Since 6.15.0; https://pmd.github.io/latest/pmd_rules_apex_codestyle.html#ifstmtsmustusebraces -->
+  <rule ref="category/apex/codestyle.xml/LocalVariableNamingConventions">
+    <priority>3</priority>
+    <properties>
+      <property name="finalLocalPattern" value="[a-z][a-zA-Z0-9]*" />
+      <property name="localPattern" value="[a-z][a-zA-Z0-9]*" />
+    </properties>
+  </rule>
+
+  <!-- PropertyNamingConventions -->
+  <!-- Since 6.15.0; https://pmd.github.io/latest/pmd_rules_apex_codestyle.html#propertynamingconventions -->
+  <rule ref="category/apex/codestyle.xml/PropertyNamingConventions">
+    <priority>1</priority>
+    <properties>
+      <property name="staticPattern" value="[a-z][a-zA-Z0-9]*" />
+      <property name="instancePattern" value="[a-z][a-zA-Z0-9]*" />
+    </properties>
+  </rule>
+
 </ruleset>

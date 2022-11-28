@@ -1,64 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="PMD Basic Set" xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0">
-  <description>Gearset standard ruleset based on that used by the Code Climate Engine for Salesforce.com Apex</description>
+  <description>Ruleset with all current PMD 6.52.0 rules. If you don't need some just comment them out. Do not remove.</description>
   <exclude-pattern>TriggerHandler.*</exclude-pattern>
 
-  <!-- Design -->
-  <rule ref="category/apex/design.xml/ExcessiveClassLength" message="Avoid really long classes (lines of code)">
-    <priority>1</priority>
-    <properties>
-      <property name="minimum" value="1000" />
-    </properties>
+  <!-- ##### Best Practices ##### -->
+
+  <!-- ApexAssertionsShouldIncludeMessage -->
+  <!-- Since 6.13.0; https://pmd.github.io/latest/pmd_rules_apex_bestpractices.html#apexassertionsshouldincludemessage -->
+  <rule ref="category/apex/bestpractices.xml/ApexAssertionsShouldIncludeMessage" message="Should include messages in apex assertions">
+    <priority>3</priority>
   </rule>
-  <rule ref="category/apex/design.xml/ExcessiveParameterList" message="Avoid long parameter lists">
+
+  <!-- ApexUnitTestClassShouldHaveAsserts -->
+  <!-- Since 5.5.1; https://pmd.github.io/latest/pmd_rules_apex_bestpractices.html#apexunittestclassshouldhaveasserts -->
+  <rule ref="category/apex/bestpractices.xml/ApexUnitTestClassShouldHaveAsserts" message="Apex unit test classes should have at least one System.assert() or assertEquals() or AssertNotEquals() call">
     <priority>1</priority>
-    <properties>
-      <property name="minimum" value="7" />
-    </properties>
   </rule>
-  <rule ref="category/apex/design.xml/ExcessivePublicCount" message="This class has too many public methods and attributes">
-    <priority>1</priority>
-    <properties>
-      <property name="minimum" value="25" />
-    </properties>
+
+  <!-- ApexUnitTestClassShouldHaveRunAs -->
+  <!-- Since 6.51.0; https://pmd.github.io/latest/pmd_rules_apex_bestpractices.html#apexunittestclassshouldhaverunas -->
+  <rule ref="category/apex/bestpractices.xml/ApexUnitTestClassShouldHaveRunAs">
+    <priority>3</priority>
   </rule>
-  <rule ref="category/apex/design.xml/NcssConstructorCount" message="The constructor has an NCSS line count of {0}">
-    <priority>1</priority>
-    <properties>
-      <property name="minimum" value="20" />
-    </properties>
+
+  <!-- ApexUnitTestMethodShouldHaveIsTestAnnotation -->
+  <!-- Since 6.13.0; https://pmd.github.io/latest/pmd_rules_apex_bestpractices.html#apexunittestmethodshouldhaveistestannotation -->
+  <rule ref="category/apex/bestpractices.xml/ApexUnitTestMethodShouldHaveIsTestAnnotation" message="Apex unit test methods should have the @isTest annotation">
+    <priority>3</priority>
   </rule>
-  <rule ref="category/apex/design.xml/NcssMethodCount" message="The method {0}() has an NCSS line count of {1}">
+
+  <!-- ApexUnitTestShouldNotUseSeeAllDataTrue -->
+  <!-- Since 5.5.1; https://pmd.github.io/latest/pmd_rules_apex_bestpractices.html#apexunittestshouldnotuseseealldatatrue -->
+  <rule ref="category/apex/bestpractices.xml/ApexUnitTestShouldNotUseSeeAllDataTrue" message="@isTest(seeAllData=true) should not be used in Apex unit tests because it opens up the existing database data for unexpected modification by tests">
     <priority>1</priority>
-    <properties>
-      <property name="minimum" value="70" />
-    </properties>
   </rule>
-  <rule ref="category/apex/design.xml/NcssTypeCount" message="The type has an NCSS line count of {0}">
-    <priority>1</priority>
+
+  <!-- AvoidGlobalModifier -->
+  <!-- Since 5.5.0; https://pmd.github.io/latest/pmd_rules_apex_bestpractices.html#avoidglobalmodifier -->
+  <rule ref="category/apex/bestpractices.xml/AvoidGlobalModifier" message="Avoid using global modifier">
+    <priority>3</priority>
+  </rule>
+
+  <!-- AvoidLogicInTrigger -->
+  <!-- Since 5.5.0; https://pmd.github.io/latest/pmd_rules_apex_bestpractices.html#avoidlogicintrigger -->
+  <rule ref="category/apex/bestpractices.xml/AvoidLogicInTrigger" message="Avoid logic in triggers">
+    <priority>3</priority>
+  </rule>
+
+  <!-- DebugsShouldUseLoggingLevel -->
+  <!-- Since 6.18.0; https://pmd.github.io/latest/pmd_rules_apex_bestpractices.html#debugsshoulduselogginglevel -->
+  <rule ref="category/apex/bestpractices.xml/DebugsShouldUseLoggingLevel">
+    <priority>3</priority>
     <properties>
-      <property name="minimum" value="700" />
+      <property name="strictMode" value="false" />
     </properties>
   </rule>
 
-  <rule ref="category/apex/design.xml/TooManyFields" message="Too many fields">
-    <priority>1</priority>
+  <!-- UnusedLocalVariable -->
+  <!-- Since 6.23.0; https://pmd.github.io/latest/pmd_rules_apex_bestpractices.html#unusedlocalvariable -->
+  <rule ref="category/apex/bestpractices.xml/UnusedLocalVariable" message="A local variable is declared and/or assigned but not used">
+    <priority>3</priority>
+  </rule>
+
+
+
+  <!-- ##### Code Style ##### -->
+
+  <!-- FieldDeclarationsShouldBeAtStart -->
+  <!-- Since 6.23.0; https://pmd.github.io/latest/pmd_rules_apex_codestyle.html#fielddeclarationsshouldbeatstart -->
+  <rule ref="category/apex/codestyle.xml/FieldDeclarationsShouldBeAtStart">
+    <priority>3</priority>
+  </rule>
+
+  <!-- ForLoopsMustUseBraces -->
+  <!-- Since 5.6.0; https://pmd.github.io/latest/pmd_rules_apex_codestyle.html#forloopsmustusebraces -->
+  <rule ref="category/apex/codestyle.xml/ForLoopsMustUseBraces" message="Avoid using 'for' statements without curly braces">
+    <priority>3</priority>
+  </rule>
+
+  <!-- IfElseStmtsMustUseBraces -->
+  <!-- Since 5.6.0; https://pmd.github.io/latest/pmd_rules_apex_codestyle.html#ifelsestmtsmustusebraces -->
+  <rule ref="category/apex/codestyle.xml/IfElseStmtsMustUseBraces" message="Avoid using 'if...else' statements without curly braces">
+    <priority>3</priority>
+  </rule>
+
+  <!-- IfStmtsMustUseBraces -->
+  <!-- Since 5.6.0; https://pmd.github.io/latest/pmd_rules_apex_codestyle.html#ifstmtsmustusebraces -->
+  <rule ref="category/apex/codestyle.xml/IfStmtsMustUseBraces" message="Avoid using if statements without curly braces">
+    <priority>3</priority>
+  </rule>
+
+  <!-- OneDeclarationPerLine -->
+  <!-- Since 6.7.0; https://pmd.github.io/latest/pmd_rules_apex_codestyle.html#methodnamingconventions -->
+  <rule ref="category/apex/codestyle.xml/OneDeclarationPerLine" message="Avoid declaring multiple variables on the same line">
+    <priority>3</priority>
     <properties>
-      <property name="maxfields" value="20" />
+      <property name="reportInForLoopInitializer" value="true" />
+      <property name="strictMode" value="false" />
     </properties>
   </rule>
+
+  <!-- WhileLoopsMustUseBraces -->
+  <!-- Since 5.6.0; https://pmd.github.io/latest/pmd_rules_apex_codestyle.html#whileloopsmustusebraces -->
+  <rule ref="category/apex/codestyle.xml/WhileLoopsMustUseBraces" message="Avoid using 'while' statements without curly braces">
+    <priority>3</priority>
+  </rule>
+
+
+
+  <!-- ##### Design ##### -->
+  <!-- https://pmd.github.io/latest/pmd_rules_apex_design.html -->
+
+  <!-- AvoidDeeplyNestedIfStmts-->
+  <!-- Since 5.5.0; https://pmd.github.io/latest/pmd_rules_apex_design.html#avoiddeeplynestedifstmts -->
   <rule ref="category/apex/design.xml/AvoidDeeplyNestedIfStmts" message="Deeply nested if..else statements are hard to read">
     <priority>1</priority>
     <properties>
       <property name="problemDepth" value="4" />
     </properties>
   </rule>
-  <rule ref="category/apex/design.xml/StdCyclomaticComplexity" message="The {0} ''{1}'' has a Standard Cyclomatic Complexity of {2}.">
-    <priority>1</priority>
+
+  <!-- CognitiveComplexity -->
+  <!-- Since 6.22.0; https://pmd.github.io/latest/pmd_rules_apex_design.html#cognitivecomplexity -->
+  <rule ref="category/apex/design.xml/CognitiveComplexity" message="Limit the cognitive complexity of your classes / methods">
     <properties>
-      <property name="reportLevel" value="20" />
+      <property name="classReportLevel" value="50" />
+      <property name="methodReportLevel" value="15" />
     </properties>
   </rule>
+
+  <!-- CyclomaticComplexity -->
+  <!-- Since 6.0.0; https://pmd.github.io/latest/pmd_rules_apex_design.html#cyclomaticcomplexity -->
   <rule ref="category/apex/design.xml/CyclomaticComplexity" message="There are high number of independent paths through the block of code">
     <priority>1</priority>
     <properties>
@@ -67,133 +139,283 @@
     </properties>
   </rule>
 
-  <!-- Error Prone -->
-  <rule ref="category/apex/errorprone.xml/AvoidDirectAccessTriggerMap" message="Avoid directly accessing Trigger.old and Trigger.new">
+  <!-- ExcessiveClassLength -->
+  <!-- Since 5.5.0; https://pmd.github.io/latest/pmd_rules_apex_design.html#excessiveclasslength -->
+  <rule ref="category/apex/design.xml/ExcessiveClassLength" message="Avoid really long classes (lines of code)">
     <priority>1</priority>
-  </rule>
-  <rule ref="category/apex/errorprone.xml/AvoidHardcodingId" message="Avoid hardcoding ID's">
-    <priority>1</priority>
-  </rule>
-  <rule ref="category/apex/errorprone.xml/MethodWithSameNameAsEnclosingClass" message="Classes should not have non-constructor methods with the same name as the class">
-    <priority>3</priority>
-  </rule>
-  <rule ref="category/apex/errorprone.xml/EmptyCatchBlock" message="Avoid empty catch blocks">
-    <priority>1</priority>
-  </rule>
-  <rule ref="category/apex/errorprone.xml/EmptyIfStmt" message="Avoid empty 'if' statements">
-    <priority>1</priority>
-  </rule>
-  <rule ref="category/apex/errorprone.xml/EmptyWhileStmt" message="Avoid empty 'while' statements">
-    <priority>1</priority>
-  </rule>
-  <rule ref="category/apex/errorprone.xml/EmptyTryOrFinallyBlock" message="Avoid empty try or finally blocks">
-    <priority>1</priority>
-  </rule>
-  <rule ref="category/apex/errorprone.xml/EmptyStatementBlock" message="Avoid empty block statements.">
-    <priority>1</priority>
-  </rule>
-  <rule ref="category/apex/errorprone.xml/AvoidNonExistentAnnotations" message="Avoid using non-existent annotations">
-    <priority>3</priority>
-  </rule>
-  <rule ref="category/apex/errorprone.xml/ApexCSRF" message="Avoid making DML operations in Apex class constructor/init method">
-    <priority>1</priority>
-  </rule>
-  <rule ref="category/apex/errorprone.xml/InaccessibleAuraEnabledGetter" message="Aura and Lightning Web Components cannot access private or protected Apex getters">
-    <priority>3</priority>
-  </rule>
-  <rule ref="category/apex/errorprone.xml/TestMethodsMustBeInTestClasses" message="Test methods should reside in a test class">
-    <priority>3</priority>
-  </rule>
-  <rule ref="category/apex/errorprone.xml/OverrideBothEqualsAndHashcode" message="Override both public Boolean equals(Object obj), and public Integer hashCode(), or override neither">
-    <priority>1</priority>
-  </rule>
-
-  <!-- Best Practices -->
-  <rule ref="category/apex/bestpractices.xml/AvoidLogicInTrigger" message="Avoid logic in triggers">
-    <priority>3</priority>
-  </rule>
-  <rule ref="category/apex/bestpractices.xml/AvoidGlobalModifier" message="Avoid using global modifier">
-    <priority>3</priority>
-  </rule>
-  <rule ref="category/apex/bestpractices.xml/ApexUnitTestClassShouldHaveAsserts" message="Apex unit test classes should have at least one System.assert() or assertEquals() or AssertNotEquals() call">
-    <priority>1</priority>
-  </rule>
-  <rule ref="category/apex/bestpractices.xml/ApexUnitTestShouldNotUseSeeAllDataTrue" message="@isTest(seeAllData=true) should not be used in Apex unit tests because it opens up the existing database data for unexpected modification by tests">
-    <priority>1</priority>
-  </rule>
-  <rule ref="category/apex/bestpractices.xml/ApexAssertionsShouldIncludeMessage" message="Should include messages in apex assertions">
-    <priority>3</priority>
-  </rule>
-  <rule ref="category/apex/bestpractices.xml/ApexUnitTestMethodShouldHaveIsTestAnnotation" message="Apex unit test methods should have the @isTest annotation">
-    <priority>3</priority>
-  </rule>
-  <rule ref="category/apex/bestpractices.xml/UnusedLocalVariable" message="A local variable is declared and/or assigned but not used">
-    <priority>3</priority>
-  </rule>
-
-  <!-- Code Style -->
-  <rule ref="category/apex/codestyle.xml/IfStmtsMustUseBraces" message="Avoid using if statements without curly braces">
-    <priority>3</priority>
-  </rule>
-  <rule ref="category/apex/codestyle.xml/WhileLoopsMustUseBraces" message="Avoid using 'while' statements without curly braces">
-    <priority>3</priority>
-  </rule>
-  <rule ref="category/apex/codestyle.xml/IfElseStmtsMustUseBraces" message="Avoid using 'if...else' statements without curly braces">
-    <priority>3</priority>
-  </rule>
-  <rule ref="category/apex/codestyle.xml/ForLoopsMustUseBraces" message="Avoid using 'for' statements without curly braces">
-    <priority>3</priority>
-  </rule>
-  <rule ref="category/apex/codestyle.xml/OneDeclarationPerLine" message="Avoid declaring multiple variables on the same line">
-    <priority>3</priority>
     <properties>
-      <property name="strictMode" value="false" />
+      <property name="minimum" value="1000" />
     </properties>
   </rule>
 
-  <!-- Security -->
-  <rule ref="category/apex/security.xml/ApexSharingViolations" message="Apex classes should declare a sharing model if DML or SOQL is used">
+  <!-- ExcessiveParameterList -->
+  <!-- Since 5.5.0; https://pmd.github.io/latest/pmd_rules_apex_design.html#excessiveparameterlist -->
+  <rule ref="category/apex/design.xml/ExcessiveParameterList" message="Avoid long parameter lists">
+    <priority>1</priority>
+    <properties>
+      <property name="minimum" value="7" />
+    </properties>
+  </rule>
+
+  <!-- ExcessivePublicCount -->
+  <!-- Since 5.5.0 https://pmd.github.io/latest/pmd_rules_apex_design.html#excessivepubliccount -->
+  <rule ref="category/apex/design.xml/ExcessivePublicCount" message="This class has too many public methods and attributes">
+    <priority>1</priority>
+    <properties>
+      <property name="minimum" value="25" />
+    </properties>
+  </rule>
+
+  <!-- NcssConstructorCount -->
+  <!-- Since 5.5.0; https://pmd.github.io/latest/pmd_rules_apex_design.html#ncssconstructorcount -->
+  <rule ref="category/apex/design.xml/NcssConstructorCount" message="The constructor has an NCSS line count of {0}">
+    <priority>1</priority>
+    <properties>
+      <property name="minimum" value="20" />
+    </properties>
+  </rule>
+
+  <!-- NcssMethodCount -->
+  <!-- Since 5.5.0; https://pmd.github.io/latest/pmd_rules_apex_design.html#ncssmethodcount -->
+  <rule ref="category/apex/design.xml/NcssMethodCount" message="The method {0}() has an NCSS line count of {1}">
+    <priority>1</priority>
+    <properties>
+      <property name="minimum" value="70" />
+    </properties>
+  </rule>
+
+  <!-- NcssTypeCount -->
+  <!-- Since 5.5.0 https://pmd.github.io/latest/pmd_rules_apex_design.html#ncsstypecount -->
+  <rule ref="category/apex/design.xml/NcssTypeCount" message="The type has an NCSS line count of {0}">
+    <priority>1</priority>
+    <properties>
+      <property name="minimum" value="700" />
+    </properties>
+  </rule>
+
+  <!-- StdCyclomaticComplexity -->
+  <!-- Since 5.5.0; https://pmd.github.io/latest/pmd_rules_apex_design.html#stdcyclomaticcomplexity -->
+  <rule ref="category/apex/design.xml/StdCyclomaticComplexity" message="The {0} ''{1}'' has a Standard Cyclomatic Complexity of {2}.">
+    <priority>1</priority>
+    <properties>
+      <property name="reportLevel" value="20" />
+      <property name="showClassesComplexity" value="true" />
+      <property name="showMethodsComplexity" value="true" />
+    </properties>
+  </rule>
+
+  <!-- TooManyFields -->
+  <!-- Since 5.5.0; https://pmd.github.io/latest/pmd_rules_apex_design.html#toomanyfields-->
+  <rule ref="category/apex/design.xml/TooManyFields" message="Too many fields">
+    <priority>1</priority>
+    <properties>
+      <property name="maxfields" value="20" />
+    </properties>
+  </rule>
+
+
+
+  <!-- ##### Documentation ###### -->
+
+  <!-- ApexDoc -->
+  <!-- Since 6.8.0; https://pmd.github.io/latest/pmd_rules_apex_documentation.html#apexdoc -->
+  <rule ref="category/apex/documentation.xml/ApexDoc">
+    <properties>
+      <property name="reportPrivate" value="false" />
+      <property name="reportProtected" value="false" />
+      <property name="reportMissingDescription" value="true" />
+      <property name="reportProperty" value="true" />
+    </properties>
+  </rule>
+
+
+
+  <!-- ##### Error Prone ##### -->
+
+  <!-- ApexCSRF -->
+  <!-- Since 5.5.3; https://pmd.github.io/latest/pmd_rules_apex_errorprone.html#apexcsrf -->
+  <rule ref="category/apex/errorprone.xml/ApexCSRF" message="Avoid making DML operations in Apex class constructor/init method">
     <priority>1</priority>
   </rule>
-  <rule ref="category/apex/security.xml/ApexInsecureEndpoint" message="Apex callouts should use encrypted communication channels">
+
+  <!-- AvoidDirectAccessTriggerMap -->
+  <!-- Since 6.0.0; https://pmd.github.io/latest/pmd_rules_apex_errorprone.html#avoiddirectaccesstriggermap -->
+  <rule ref="category/apex/errorprone.xml/AvoidDirectAccessTriggerMap" message="Avoid directly accessing Trigger.old and Trigger.new">
     <priority>1</priority>
   </rule>
-  <rule ref="category/apex/security.xml/ApexOpenRedirect" message="Apex classes should safely redirect to a known location">
+
+  <!-- AvoidHardcodingId -->
+  <!-- Since 6.0.0; https://pmd.github.io/latest/pmd_rules_apex_errorprone.html#avoidhardcodingid -->
+  <rule ref="category/apex/errorprone.xml/AvoidHardcodingId" message="Avoid hardcoding ID's">
     <priority>1</priority>
   </rule>
-  <rule ref="category/apex/security.xml/ApexSOQLInjection" message="Apex classes should escape variables merged in DML query">
+
+  <!-- AvoidNonExistentAnnotations -->
+  <!-- Since 6.5.0; https://pmd.github.io/latest/pmd_rules_apex_errorprone.html#avoidnonexistentannotations -->
+  <rule ref="category/apex/errorprone.xml/AvoidNonExistentAnnotations" message="Avoid using non-existent annotations">
+    <priority>3</priority>
+  </rule>
+
+  <!-- EmptyCatchBlock -->
+  <!-- Since 6.0.0; https://pmd.github.io/latest/pmd_rules_apex_errorprone.html#emptycatchblock -->
+  <rule ref="category/apex/errorprone.xml/EmptyCatchBlock" message="Avoid empty catch blocks">
     <priority>1</priority>
   </rule>
-  <rule ref="category/apex/security.xml/ApexXSSFromURLParam" message="Apex classes should escape Strings obtained from URL parameters">
+
+  <!-- EmptyIfStmt -->
+  <!-- Since 6.0.0; https://pmd.github.io/latest/pmd_rules_apex_errorprone.html#emptyifstmt -->
+  <rule ref="category/apex/errorprone.xml/EmptyIfStmt" message="Avoid empty 'if' statements">
     <priority>1</priority>
   </rule>
-  <rule ref="category/apex/security.xml/ApexXSSFromEscapeFalse" message="Apex classes should escape addError strings">
+
+  <!-- EmptyStatementBlock -->
+  <!-- Since 6.0.0; https://pmd.github.io/latest/pmd_rules_apex_errorprone.html#emptystatementblock -->
+  <rule ref="category/apex/errorprone.xml/EmptyStatementBlock" message="Avoid empty block statements.">
+    <priority>1</priority>
+    <properties>
+      <property name="reportEmptyPrivateNoArgConstructor" value="true" />
+      <property name="reportEmptyVirtualMethod" value="true" />
+    </properties>
+  </rule>
+
+  <!-- EmptyTryOrFinallyBlock -->
+  <!-- Since 6.0.0; https://pmd.github.io/latest/pmd_rules_apex_errorprone.html#emptytryorfinallyblock -->
+  <rule ref="category/apex/errorprone.xml/EmptyTryOrFinallyBlock" message="Avoid empty try or finally blocks">
     <priority>1</priority>
   </rule>
+
+  <!-- EmptyWhileStmt -->
+  <!-- Since 6.0.0; https://pmd.github.io/latest/pmd_rules_apex_errorprone.html#emptywhilestmt -->
+  <rule ref="category/apex/errorprone.xml/EmptyWhileStmt" message="Avoid empty 'while' statements">
+    <priority>3</priority>
+  </rule>
+
+  <!-- InaccessibleAuraEnabledGetter -->
+  <!-- Since 6.36.0; https://pmd.github.io/latest/pmd_rules_apex_errorprone.html#inaccessibleauraenabledgetter -->
+  <rule ref="category/apex/errorprone.xml/InaccessibleAuraEnabledGetter" message="Aura and Lightning Web Components cannot access private or protected Apex getters">
+    <priority>3</priority>
+  </rule>
+
+  <!-- MethodWithSameNameAsEnclosingClass -->
+  <!-- Since 5.5.0; https://pmd.github.io/latest/pmd_rules_apex_errorprone.html#methodwithsamenameasenclosingclass -->
+  <rule ref="category/apex/errorprone.xml/MethodWithSameNameAsEnclosingClass" message="Classes should not have non-constructor methods with the same name as the class">
+    <priority>3</priority>
+  </rule>
+
+  <!-- OverrideBothEqualsAndHashcode -->
+  <!-- Since 6.31.0 -->
+  <rule ref="category/apex/errorprone.xml/OverrideBothEqualsAndHashcode" message="Override both public Boolean equals(Object obj), and public Integer hashCode(), or override neither">
+    <priority>3</priority>
+  </rule>
+
+  <!-- TestMethodsMustBeInTestClasses -->
+  <!-- Since 6.22.0; https://pmd.github.io/latest/pmd_rules_apex_errorprone.html#testmethodsmustbeintestclasses -->
+  <rule ref="category/apex/errorprone.xml/TestMethodsMustBeInTestClasses" message="Test methods should reside in a test class">
+    <priority>3</priority>
+  </rule>
+
+
+
+  <!-- ##### Performance ##### -->
+
+  <!-- AvoidDebugStatements -->
+  <!-- Since 6.36.0 https://pmd.github.io/latest/pmd_rules_apex_performance.html#avoiddebugstatements -->
+  <rule ref="category/apex/performance.xml/AvoidDebugStatements" message="Prefer Apex Reply Debugger and Checkpoints over debug statements to avoid longer transaction and consume Apex CPU time">
+    <priority>3</priority>
+  </rule>
+
+  <!-- EagerlyLoadedDescribeSObjectResult -->
+  <!-- Since 6.40.0; https://pmd.github.io/latest/pmd_rules_apex_performance.html#eagerlyloadeddescribesobjectresult -->
+  <rule ref="category/apex/performance.xml/EagerlyLoadedDescribeSObjectResult">
+    <properties>
+      <property name="noDefault" value="false" />
+    </properties>
+  </rule>
+
+  <!-- OperationWithLimitsInLoop -->
+  <!-- Since 6.29.0 https://pmd.github.io/latest/pmd_rules_apex_performance.html#operationwithlimitsinloop -->
+  <rule ref="category/apex/performance.xml/OperationWithLimitsInLoop" message="Avoid database class methods, DML operations, SOQL queries, or SOSL queries inside loops">
+    <priority>3</priority>
+  </rule>
+
+
+
+  <!-- ##### Security ##### -->
+
+  <!-- ApexBadCrypto -->
+  <!-- Since 5.5.3; https://pmd.github.io/latest/pmd_rules_apex_security.html#apexbadcrypto -->
   <rule ref="category/apex/security.xml/ApexBadCrypto" message="Apex Crypto should use random IV/key">
     <priority>1</priority>
   </rule>
+
+  <!-- ApexCRUDViolation -->
+  <!-- Since 5.5.3; https://pmd.github.io/latest/pmd_rules_apex_security.html#apexcrudviolation -->
+  <!-- Inactive 
+  <rule ref="category/apex/security.xml/ApexCRUDViolation">
+    <priority>3</priority>
+    <properties>
+      <property name="updateAuthMethodPattern" value="" />
+      <property name="updateAuthMethodTypeParamIndex" value="0" />
+      <property name="readAuthMethodPattern" value="" />
+      <property name="readAuthMethodTypeParamIndex" value="0" />
+      <property name="undeleteAuthMethodPattern" value="" />
+      <property name="undeleteAuthMethodTypeParamIndex" value="0" />
+      <property name="deleteAuthMethodPattern" value="" />
+      <property name="deleteAuthMethodTypeParamIndex" value="0" />
+      <property name="mergeAuthMethodPattern" value="" />
+      <property name="mergeAuthMethodTypeParamIndex" value="0" />
+      <property name="createAuthMethodPattern" value="" />
+      <property name="createAuthMethodTypeParamIndex" value="0" />
+    </properties>
+  </rule>
+  -->
+
+  <!-- ApexDangerousMethods -->
+  <!-- Since 5.5.3; https://pmd.github.io/latest/pmd_rules_apex_security.html#apexdangerousmethods -->
   <rule ref="category/apex/security.xml/ApexDangerousMethods" message="Calling potentially dangerous method">
     <priority>1</priority>
   </rule>
+
+  <!-- ApexInsecureEndpoint -->
+  <!-- Since 5.5.3; https://pmd.github.io/latest/pmd_rules_apex_security.html#apexinsecureendpoint -->
+  <rule ref="category/apex/security.xml/ApexInsecureEndpoint" message="Apex callouts should use encrypted communication channels">
+    <priority>1</priority>
+  </rule>
+
+  <!-- ApexOpenRedirect -->
+  <!-- Since 5.5.3; https://pmd.github.io/latest/pmd_rules_apex_security.html#apexopenredirect -->
+  <rule ref="category/apex/security.xml/ApexOpenRedirect" message="Apex classes should safely redirect to a known location">
+    <priority>1</priority>
+  </rule>
+
+  <!-- ApexSharingViolations -->
+  <!-- Since 5.5.3; https://pmd.github.io/latest/pmd_rules_apex_security.html#apexsharingviolations -->
+  <rule ref="category/apex/security.xml/ApexSharingViolations" message="Apex classes should declare a sharing model if DML or SOQL is used">
+    <priority>1</priority>
+  </rule>
+
+  <!-- ApexSOQLInjection -->
+  <!-- Since 5.5.3; https://pmd.github.io/latest/pmd_rules_apex_security.html#apexsoqlinjection -->
+  <rule ref="category/apex/security.xml/ApexSOQLInjection" message="Apex classes should escape variables merged in DML query">
+    <priority>1</priority>
+  </rule>
+
+  <!-- ApexSuggestUsingNamedCred -->
+  <!-- Since 5.5.3; https://pmd.github.io/latest/pmd_rules_apex_security.html#apexsuggestusingnamedcred -->
   <rule ref="category/apex/security.xml/ApexSuggestUsingNamedCred" message="Consider using named credentials for authenticated callouts">
     <priority>1</priority>
   </rule>
 
-  <!-- Performance -->
-  <rule ref="category/apex/performance.xml/AvoidDebugStatements" message="Prefer Apex Reply Debugger and Checkpoints over debug statements to avoid longer transaction and consume Apex CPU time">
-    <priority>3</priority>
-  </rule>
-  <rule ref="category/apex/performance.xml/OperationWithLimitsInLoop" message="Avoid database class methods, DML operations, SOQL queries, or SOSL queries inside loops">
+  <!-- ApexXSSFromEscapeFalse -->
+  <!-- Since  5.5.3; https://pmd.github.io/latest/pmd_rules_apex_security.html#apexxssfromescapefalse-->
+  <rule ref="category/apex/security.xml/ApexXSSFromEscapeFalse" message="Apex classes should escape addError strings">
     <priority>1</priority>
   </rule>
 
-  <!-- Apex Doc -->
-  <rule ref="category/apex/documentation.xml/ApexDoc">
-    <properties>
-        <property name="reportPrivate" value="false" />
-        <property name="reportProtected" value="false" />
-    </properties>
+  <!-- ApexXSSFromURLParam -->
+  <!-- Since 5.5.3; https://pmd.github.io/latest/pmd_rules_apex_security.html#apexxssfromescapefalse -->
+  <rule ref="category/apex/security.xml/ApexXSSFromURLParam" message="Apex classes should escape Strings obtained from URL parameters">
+    <priority>1</priority>
   </rule>
 
 </ruleset>
