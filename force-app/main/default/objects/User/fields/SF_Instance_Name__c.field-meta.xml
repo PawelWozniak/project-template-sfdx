@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SF_Instance_Name__c</fullName>
+    <description>Accessible in formulas using $User.SF_Instance_Name__c</description>
+    <externalId>false</externalId>
+    <formula>/* This formula was created to extract sandbox name which can be used in various conditions. 
+ From user object it is always accessible as $User.SF_Instance_Name__c Returns sandbox name or PROD.
+ It is parsing Sandbox URL like https://myDomainName--dev.sandbox.my.salesforce.com/ and is searching for two spots.
+ 1. Location of &apos;--&apos; + 2 characters as FIND returns location of first character
+	2. Location if &apos;sandbox&apos; - 2 characters to get char location number before dot.
+	Then MID is used to cut out sandbox name which is located between those two markers.
+	Formula may fail if url schema will be changed. It might also fail on developer editions or 
+*/
+IF(CONTAINS(LEFT($Api.Partner_Server_URL_560, FIND(&apos;/services&apos;, $Api.Partner_Server_URL_560)),&apos;--&apos;),
+			/* Cut out sandbox name from URL */
+			MID(LEFT($Api.Partner_Server_URL_560, FIND(&apos;sandbox&apos;, $Api.Partner_Server_URL_560) - 2),
+							(FIND(&apos;--&apos;, $Api.Partner_Server_URL_560) + 2),
+							20),
+			&quot;PROD&quot;
+		)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>Returns &quot;PROD&quot; or Sandbox name if instance is a Sandbox.</inlineHelpText>
+    <label>SF Instance Name</label>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>
