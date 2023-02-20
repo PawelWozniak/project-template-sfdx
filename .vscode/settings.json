@@ -5,6 +5,11 @@
     "**/.sfdx": true
   },
 
+  "explorer.autoRevealExclude": {
+    "**/node_modules": true,
+    "**/bower_components": true
+  },
+
   "editor.stickyTabStops": true,
   "editor.rulers": [
     160

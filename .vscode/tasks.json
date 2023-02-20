@@ -27,7 +27,7 @@
                 "cwd": "${workspaceFolder}",
             },
             "args": [
-                "force:source:deploy",
+                "source:deploy",
                 "--checkonly",
                 "--verbose",
                 "--sourcepath",
@@ -66,7 +66,7 @@
             "type": "shell",
             "command": "sfdx",
             "args": [
-                "force:source:retrieve",
+                "source:retrieve",
                 "-m",
                 "${input:MetadataType}:${input:MetadataName}"
             ]
@@ -78,10 +78,30 @@
             "type": "shell",
             "command": "sfdx",
             "args": [
-                "force:apex:log:tail",
+                "apex:log:tail",
                 "--color"
             ]
-        }
+        },
+        // Salesforce code scanner. More details: https://forcedotcom.github.io/sfdx-scanner/
+        // Install plugin first: sfdx plugins:install @salesforce/sfdx-scanner
+        {
+            "label": "Check code with SFDX Scanner",
+            "detail": "Scan code for issues with SFDX Scaner",
+            "group": "build",
+            "type": "shell",
+            "command": "sfdx",
+            "args": [
+                "scanner:run",
+                "--target",
+                "./",
+                "--projectdir",
+                "./",
+                "--engine",
+                "sfge",
+                "--format",
+                "csv"
+            ]
+        },
     ],
     "inputs": [
         {
