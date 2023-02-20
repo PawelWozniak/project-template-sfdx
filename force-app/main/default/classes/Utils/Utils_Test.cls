@@ -21,12 +21,6 @@ public without sharing class Utils_Test {
 	}
 
 	@isTest
-	private static void test_getRTIdByName() {
-		Id rtId = Utils.getRTIdByName('Lead', 'Master');
-		System.assert(rtId != null, 'RecordTypeId should not be empty');
-	}
-
-	@isTest
 	private static void test_getRTIdByDeveloperName() {
 		Id rtId = Utils.getRTIdByDeveloperName('Lead', 'Master');
 		System.assert(rtId != null, 'RecordTypeId should not be empty');
@@ -93,6 +87,7 @@ public without sharing class Utils_Test {
 	@isTest
 	@SuppressWarnings('PMD.UnusedLocalVariable')
 	private static void testTriggerException() {
+		// Query exception
 		try {
 			try {
 				Opportunity opp = [SELECT Id, Name FROM Opportunity LIMIT 1];
@@ -104,6 +99,66 @@ public without sharing class Utils_Test {
 		catch (Exception te) {
 			System.assert(te.getMessage().startsWith('**1234** Caused by: System.QueryException: List has no rows for assignment to SObject.'), 'Custom Error should have transaction id.');
 		}
+
+		// DML Exception
+		try {
+			try {
+				Lead newLead = new Lead();
+				newLead.FirstName = 'Tester';
+				insert newLead;
+			}
+			catch (Exception ex) {
+				throw new Utils.triggerException(ex, '1234');
+			}
+		}
+		catch (Exception te) {
+			System.assert(te.getMessage().startsWith('**1234** Caused by: System.DmlException: Insert failed.'), 'Custom Error should have transaction id.' + te.getMessage());
+		}
+	}
+
+	@isTest
+	private static void test_formatException() {
+		// Test DmlException
+		try {
+			Lead newLead = new Lead();
+			newLead.FirstName = 'Tester';
+			insert newLead;
+		}
+		catch (Exception ex) {
+			String formattedError = Utils.formatException(ex);
+			Assert.isTrue(formattedError.contains('Type: System.DmlException'));
+		}
+	}
+
+	@IsTest
+	private static void test_formatHttpRequestResponse() {
+		Test.startTest();
+		Test.setMock(HttpCalloutMock.class, new httpErrorMock(404));
+		String requestId = null;
+
+		String endPoint_URL = 'www.example.com/API/v1/account';
+		String method = 'POST';
+
+		Http httpCallout = new Http();
+		HttpRequest request = new HttpRequest();
+		request.setEndpoint(endPoint_URL);
+		request.setMethod(method);
+
+		HttpResponse response = httpCallout.send(request);
+
+		if (response.getStatusCode() == 200) {
+			// Process response
+		}
+		else {
+			String formattedError = Utils.formatHttpRequestResponse(request, response);
+			Assert.isTrue(formattedError.contains('Endpoint: www.example.com/API/v1/account'));
+			Assert.isTrue(formattedError.contains('Method: POST'));
+		}
+
+		// For increasing code coverage
+		String emptyError = Utils.formatHttpRequestResponse(null, null);
+		Assert.isTrue(emptyError.contains('*Request argument was null*'));
+		Assert.isTrue(emptyError.contains('*Response argument was null*'));
 	}
 
 	@isTest
@@ -190,6 +245,32 @@ public without sharing class Utils_Test {
 	private static void testIsPW() {
 		Boolean isPw = Utils.isPW();
 		System.assertNotEquals(null, isPw, 'Should return true or false');
+	}
+
+	// Not in a separate class to keep it as an independent module resistant for other changes.
+	public class httpErrorMock implements HttpCalloutMock {
+
+		Integer returnCode;
+
+		public httpErrorMock(Integer returnCode) {
+			this.returnCode = returnCode;
+		}
+
+		// 404 Not Found
+		public HTTPResponse respond(HTTPRequest req) {
+			if (returnCode == 404) {
+				HttpResponse res = new HttpResponse();
+				res.setHeader('Content-Type', 'application/json');
+				res.setBody('{"error":{"message":"Not Found"},"success":false}');
+				res.setStatusCode(returnCode);
+				res.setStatus('Bad Request');
+				return res;
+			}
+
+			System.debug('##### ^^^ Returning null from mock class. Something went wrong, check your code. ^^^ ######');
+			return null;
+		}
+
 	}
 
 }

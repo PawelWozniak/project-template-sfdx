@@ -11,6 +11,8 @@ public without sharing class Utils {
 	private static Boolean isInAsyncContext = null;
 	private static Boolean canExecuteDebug = null;
 
+	private static Map<String, Id> recordTypeCache = new Map<String, Id>();
+
 	/**
 	 * @description Check if current org is Sandbox
 	 * @return true/false
@@ -40,25 +42,19 @@ public without sharing class Utils {
 	/****************************** Get info from Schema ******************************/
 
 	/**
-	 * @description Get record Type Id by Name
-	 * @param objectName string with object API name.
-	 * @param rtName record type name.
-	 * @return Id of record type.
-	 */
-	public static String getRTIdByName(String objectName, String rtName) {
-		Id recordTypeId = Schema.getGlobalDescribe().get(objectName).getDescribe().getRecordTypeInfosByName().get(rtName).getRecordTypeId();
-		return recordTypeId;
-	}
-
-	/**
 	 * @description Get record Type Id by Developer Name
 	 * @param objectName string with object API name.
 	 * @param rtDeveloperName record type API name.
 	 * @return Id of record type.
 	 */
 	public static String getRTIdByDeveloperName(String objectName, String rtDeveloperName) {
-		Id recordTypeId = Schema.getGlobalDescribe().get(objectName).getDescribe().getRecordTypeInfosByDeveloperName().get(rtDeveloperName).getRecordTypeId();
-		return recordTypeId;
+		String rtKeyString = objectName + rtDeveloperName;
+
+		if (!recordTypeCache.containsKey(rtKeyString)) {
+			recordTypeCache.put(rtKeyString, Schema.getGlobalDescribe().get(objectName).getDescribe().getRecordTypeInfosByDeveloperName().get(rtDeveloperName).getRecordTypeId());
+		}
+
+		return recordTypeCache.get(rtKeyString);
 	}
 
 	/**
@@ -230,8 +226,117 @@ public without sharing class Utils {
 		 */
 		public triggerException (Exception ex, String requestID) {
 			String message = '**' + requestID + '**' + ' Caused by: ' + ex.getTypeName() + ': ' + ex.getMessage() + '. # ' + ex.getStackTraceString().split(', column 1')[0] + ' #';
-			this.setMessage(message);
+			String endUserMsg = makeExceptionMessageUserReadable(ex);
+			this.setMessage(message + endUserMsg);
 		}
+	}
+
+	private static String makeExceptionMessageUserReadable(Exception ex) {
+		String formattedMessage = '';
+
+		if (ex.getMessage() == null) {
+			return '';
+		}
+
+		System.Debug('@#@ ex.getTypeName(): ' + ex.getTypeName());
+		if (ex.getTypeName() == 'System.DmlException') {
+			for (integer i = 0; i < ex.getNumDML(); i++) {
+				System.Debug('@#@ formatException: ' + formatException(ex));
+				String objectName = '';
+				if (ex.getDmlId(i) != null) {
+					objectName = Id.valueOf(ex.getDmlId(i)).getSobjectType().getDescribe().label;
+					formattedMessage += '⚠️Error on ' + objectName + '. ';
+				}
+				else {
+					formattedMessage += '⚠️Error. ';
+				}			 
+				formattedMessage += '👉';
+				formattedMessage += ex.getDmlMessage(i); 
+			}
+		}
+
+		formattedMessage += '👈';
+		return formattedMessage;
+	}
+
+	/**
+	 * @description Use this method to display all possible details about error
+	 * @param exception exception thrown from code
+	 * @return Formatted string with exception details.
+	 * @link https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_classes_exception_methods.htm
+	 */
+
+	public static String formatException(Exception ex) {
+		if (ex == null) {
+			return '*Exception was null*';
+		}
+
+		String exceptionDetails = '';
+		exceptionDetails = exceptionDetails + 'Type: ' + ex.getTypeName();
+		exceptionDetails = exceptionDetails + '\r\nCause: ' + ex.getCause();
+		exceptionDetails = exceptionDetails + '\r\nStackTrace: ' + ex.getStackTraceString();
+		exceptionDetails = exceptionDetails + '\r\nMessage: ' + ex.getMessage();
+
+		if (ex.getTypeName() == 'System.DmlException' || ex.getTypeName() == 'System.EmailException') {
+			for (Integer i = 0; i < ex.getNumDml(); i++) {
+				exceptionDetails += '\r\n\r\n### Record number: ' + i + ' ###';
+				exceptionDetails += '\r\nDmlFieldNames: ' + ex.getDmlFieldNames(i);
+				exceptionDetails += '\r\nDmlFields: ' + ex.getDmlFields(i);
+				exceptionDetails += '\r\nDmlId: ' + ex.getDmlId(i);
+				exceptionDetails += '\r\nDmlIndex: ' + ex.getDmlIndex(i);
+				exceptionDetails += '\r\nDmlMessage: ' + ex.getDmlMessage(i);
+				exceptionDetails += '\r\nDmlStatusCode: ' + ex.getDmlStatusCode(i);
+				exceptionDetails += '\r\nDmlType: ' + ex.getDmlType(i);
+			}
+		}
+
+		return exceptionDetails;
+	}
+
+	/**
+	 * @description Use this method to format HTTP request and response for better visibility in debug logs.
+	 * @param request pass here HttpRequest type variable.
+	 * @param response pass here HttpResponse type variable.
+	 * @return Parsed and formatted request and response.
+	 */
+	public static String formatHttpRequestResponse(HttpRequest request, HttpResponse response) {
+		String responseStatus = '';
+		String httpRequestFormatted = '';
+		String httpResponseFormatted = '';
+
+		if (request != null) {
+			httpRequestFormatted += 'Endpoint: ' + request.getEndpoint() + ', Method: ' + request.getMethod();
+			httpRequestFormatted += '\r\nContent-Type: ' + request?.getHeader('Content-Type');
+			httpRequestFormatted += '\r\nRequest body: ' + request?.getBody();
+		}
+		else {
+			httpRequestFormatted = '*Request argument was null*';
+		}
+
+		if (response != null) {
+			responseStatus = 'Status: ' + response.getStatusCode() + ' ' + response.getStatus();
+			httpResponseFormatted += responseStatus;
+
+			if (!response.getHeaderKeys().isEmpty()) {
+				httpResponseFormatted += '\r\n Response Headers: ';
+
+				for (String key: response.getHeaderKeys()) {
+					httpResponseFormatted += '\r\n' + key + ' = ' + response.getHeader(key);
+				}
+			}
+
+			if (response?.getBody()?.length() > 131072) { // fix maximum line width
+				httpResponseFormatted += '\r\nResponse body: ' + response?.getBody()?.substring(0, 131055);
+			}
+			else {
+				httpResponseFormatted += '\r\nResponse body: ' + response?.getBody();
+			}
+		}
+		else {
+			httpResponseFormatted = '*Response argument was null*';
+		}
+
+		return '### Request ###\r\n' + httpRequestFormatted + '\r\n### Response ###\r\n' + httpResponseFormatted;
 	}
 
 	/**
@@ -356,8 +461,9 @@ public without sharing class Utils {
 			String recordName = '*Missing Record Name*';
 			try {
 				recordName = String.valueOf(savedRecords.get(i).get('Name'));
-			} catch (System.SObjectException ex) {
-				Utils.notifyInDebugLog('Add >Name< to SOQL query to catch record Name and improve logs. [Utils.logSuccessAndFailedSaveToDebugLog]');
+			}
+			catch (System.SObjectException ex) {
+				recordName = 'Add >Name< to SOQL query to catch record Name and improve this log.';
 			}
 
 			String recordString = recordId + ' ' + '"' + recordName + '"';
@@ -397,7 +503,7 @@ public without sharing class Utils {
 	@SuppressWarnings('PMD.AvoidDebugStatements')
 	private static void printSaveResultsInDebugLog(List<String> saveSuccess, Map<String, List<String>> saveErrors) {
 		if (!saveSuccess.isEmpty()) {
-			System.debug('#@# Records updated with success: ');
+			System.debug(LoggingLevel.INFO, '#@# Records updated with success: ');
 
 			for (String header : saveSuccess) {
 				System.debug(LoggingLevel.INFO, header);
@@ -405,7 +511,7 @@ public without sharing class Utils {
 		}
 
 		if (!saveErrors.isEmpty()) {
-			System.debug('#@# Those records are not updated because of errors: ');
+			System.debug(LoggingLevel.INFO, '#@# Those records were not updated because of errors: ');
 
 			for (String header : saveErrors.keySet()) {
 				System.debug(LoggingLevel.INFO, header);

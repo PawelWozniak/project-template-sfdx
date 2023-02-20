@@ -63,7 +63,6 @@ global class ScheduledJobsDispatcher implements Schedulable {
 			when 0, 1, 2, 3, 4 {
 				System.debug('ScheduledJobsDispatcher at hh:00 min');
 				runEvery5Minutes();
-				// Do not add any jobs here as Schedule section use this time slot
 			}
 
 			when 5, 6, 7, 8, 9 {
@@ -80,6 +79,7 @@ global class ScheduledJobsDispatcher implements Schedulable {
 
 			when 15, 16, 17, 18, 19 {
 				System.debug('ScheduledJobsDispatcher at hh:15 min');
+				// Do not add any jobs here as Schedule section use this time slot
 				runEvery5Minutes();
 			}
 
@@ -140,8 +140,8 @@ global class ScheduledJobsDispatcher implements Schedulable {
 		}
 
 		// Use this section to schedule jobs that should run in off peek hours.
-		// Schedule runs at h:00
-		if (minute >= 0 && minute <= 4) {
+		// Schedule runs at h:15 - hh:19 depending on SF instance workload.
+		if (minute >= 15 && minute <= 19) {
 			switch on hour {
 				when 20 {
 					System.debug('ScheduledJobsDispatcher at 20 hour');
