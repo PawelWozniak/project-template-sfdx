@@ -48,14 +48,28 @@ $RECYCLE.BIN/
 # Local environment variables
 .env
 
+# ApexAssist files
+.apexlink
+
+# Python Salesforce Functions
+**/__pycache__/
+**/.venv/
+**/venv/
+
 # Ignore all list views as we don't want to store user's personal list views that keeps changing frequently.
-force-app/main/default/objects/*/listViews/*.listView-meta.xml
-# Do not ignore those ListViews:
+*/main/default/objects/*/listViews/*.listView-meta.xml
+
+# Do not ignore those ListViews - Standard Objects:
+!All_Leads.listView-meta.xml
 !AllAccounts.listView-meta.xml
 !AllContacts.listView-meta.xml
 !AllOpportunities.listView-meta.xml
 !AllContracts.listView-meta.xml
+!AllProducts.listView-meta.xml
+!force-app/main/default/objects/User/listViews/*
 
+# Do not ignore those ListViews - Custom Objects:
+!All.listView-meta.xml
 
 # Other
 package-lock.json
@@ -63,3 +77,5 @@ temp/
 scripts/apex/temp.apex
 manifest/package.xml
 manifest-delta/
+.idea/
+IlluminatedCloud/

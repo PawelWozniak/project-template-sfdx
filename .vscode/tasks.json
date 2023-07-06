@@ -18,8 +18,8 @@
             ]
         },
         {
-            "label": "Deploy verify on target",
-            "detail": "Use SFDX to deploy changes",
+            "label": "Verify deployment",
+            "detail": "Verify only on target org",
             "group": "build",
             "type": "shell",
             "command": "sfdx",
@@ -27,13 +27,69 @@
                 "cwd": "${workspaceFolder}",
             },
             "args": [
-                "source:deploy",
-                "--checkonly",
+                "project",
+                "deploy",
+                "start",
+                "--dry-run",
                 "--verbose",
-                "--sourcepath",
-                "force-app",
-                "-u",
-                "${input:TargetOrgs}"
+                "--test-level",
+                "RunLocalTests",
+                "--source-dir",
+                ".",
+                "--target-org",
+                "${input:VerifyTargetOrgs}"
+            ]
+        },
+        {
+            "label": "Deploy to Sandbox",
+            "detail": "Use SFDX to any sandbox",
+            "group": "build",
+            "type": "shell",
+            "command": "sfdx",
+            "options": {
+                "cwd": "${workspaceFolder}",
+            },
+            "args": [
+                "project",
+                "deploy",
+                "start",
+                "--verbose",
+                "--test-level",
+                "RunLocalTests",
+                "--source-dir",
+                ".",
+                "--target-org",
+                "${input:DeployTargetOrgs}"
+            ]
+        },
+        {
+            "label": "List items to deploy ??",
+            "detail": "List the difference between local source and sf org",
+            "group": "build",
+            "type": "shell",
+            "command": "sfdx",
+            "options": {
+                "cwd": "${workspaceFolder}",
+            },
+            "args": [
+                "project",
+                "deploy",
+                "preview",
+            ]
+        },
+        {
+            "label": "List items to download ??",
+            "detail": "List the difference between sf org and local source",
+            "group": "build",
+            "type": "shell",
+            "command": "sfdx",
+            "options": {
+                "cwd": "${workspaceFolder}",
+            },
+            "args": [
+                "project",
+                "retrieve",
+                "preview",
             ]
         },
         {
@@ -43,10 +99,12 @@
             "type": "shell",
             "command": "sfdx",
             "args": [
-                "auth:web:login",
-                "--instanceurl",
+                "org",
+                "login",
+                "web",
+                "--instance-url",
                 "https://test.salesforce.com",
-                "--setalias",
+                "--alias",
                 "${input:SandboxName}"
             ],
             "problemMatcher": [],
@@ -95,7 +153,7 @@
                 "--target",
                 "./",
                 "--projectdir",
-                "./",
+                "./force-app",
                 "--engine",
                 "sfge",
                 "--format",
@@ -124,12 +182,20 @@
             ]
         },
         {
-            "id": "TargetOrgs",
-            "description": "Target orgs for deployment",
+            "id": "VerifyTargetOrgs",
+            "description": "Target orgs for deployment vrification",
             "type": "pickString",
             "options": [
-                "uat",
-                "PROD"
+                "PROD",
+                "DEV"
+            ]
+        },
+        {
+            "id": "DeployTargetOrgs",
+            "description": "Target orgs for deployment. Exclude PROD org to avoid mistakes.",
+            "type": "pickString",
+            "options": [
+                "DEV"
             ]
         },
     ]

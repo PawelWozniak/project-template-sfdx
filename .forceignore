@@ -9,14 +9,21 @@ package.xml
 # Check what is ignored with sfdx force:source:ignored:list
 
 # Ignore metadata that are (and must) be different between PROD and sandboxes
-force-app/main/default/permissionsetgroups/Common_for_all_users.permissionsetgroup-meta.xml
+*/main/default/permissionsetgroups/Common_for_all_users.permissionsetgroup-meta.xml
 # Ignore all list views as we don't want to store user's personal list views that keeps changing frequently.
-force-app/main/default/objects/*/listViews/*.listView-meta.xml
-# Do not ignore those ListViews:
+*/main/default/objects/*/listViews/*.listView-meta.xml
+
+# Do not ignore those ListViews - Standard Objects:
+!All_Leads.listView-meta.xml
 !AllAccounts.listView-meta.xml
 !AllContacts.listView-meta.xml
 !AllOpportunities.listView-meta.xml
 !AllContracts.listView-meta.xml
+!AllProducts.listView-meta.xml
+!force-app/main/default/objects/User/listViews/*
+
+# Do not ignore those ListViews - Custom Objects:
+!All.listView-meta.xml
 
 
 # LWC configuration files

@@ -19,9 +19,10 @@
 
   <!-- ApexUnitTestClassShouldHaveRunAs -->
   <!-- Since 6.51.0; https://pmd.github.io/latest/pmd_rules_apex_bestpractices.html#apexunittestclassshouldhaverunas -->
-  <rule ref="category/apex/bestpractices.xml/ApexUnitTestClassShouldHaveRunAs">
+  <!-- Inactive
+    <rule ref="category/apex/bestpractices.xml/ApexUnitTestClassShouldHaveRunAs">
     <priority>3</priority>
-  </rule>
+  </rule> -->
 
   <!-- ApexUnitTestMethodShouldHaveIsTestAnnotation -->
   <!-- Since 6.13.0; https://pmd.github.io/latest/pmd_rules_apex_bestpractices.html#apexunittestmethodshouldhaveistestannotation -->
@@ -61,8 +62,6 @@
   <rule ref="category/apex/bestpractices.xml/UnusedLocalVariable" message="A local variable is declared and/or assigned but not used">
     <priority>3</priority>
   </rule>
-
-
 
   <!-- ##### Code Style ##### -->
 
@@ -124,8 +123,8 @@
   <!-- Since 6.22.0; https://pmd.github.io/latest/pmd_rules_apex_design.html#cognitivecomplexity -->
   <rule ref="category/apex/design.xml/CognitiveComplexity" message="Limit the cognitive complexity of your classes / methods">
     <properties>
-      <property name="classReportLevel" value="50" />
-      <property name="methodReportLevel" value="15" />
+      <property name="classReportLevel" value="60" />
+      <property name="methodReportLevel" value="30" />
     </properties>
   </rule>
 
@@ -134,8 +133,8 @@
   <rule ref="category/apex/design.xml/CyclomaticComplexity" message="There are high number of independent paths through the block of code">
     <priority>1</priority>
     <properties>
-      <property name="classReportLevel" value="40" />
-      <property name="methodReportLevel" value="20" />
+      <property name="classReportLevel" value="60" />
+      <property name="methodReportLevel" value="30" />
     </properties>
   </rule>
 

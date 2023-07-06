@@ -20,6 +20,8 @@
   "visualforce.format.wrapLineLength": 160,
 
   "apexPMD.runOnFileOpen": true,
+  "apexPMD.enableCache": true,
+  "apexPMD.commandBufferSize": 5,
   "apexPMD.rulesets": [
     "./config/PMD_01_BasicSet.xml"
   ],
@@ -91,6 +93,7 @@
     "Gantt",
     "instanceof",
     "MULTIPICKLIST",
+    "NOPMD",
     "Opps",
     "Pardot",
     "picklist",
@@ -98,6 +101,7 @@
     "Pricebook",
     "queueable",
     "Rollup",
+    "RTID",
     "SBQQ",
     "SBQQSC",
     "Schedulable",
