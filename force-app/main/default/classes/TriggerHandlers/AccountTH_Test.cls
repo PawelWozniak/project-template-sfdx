@@ -26,4 +26,18 @@ public without sharing class AccountTH_Test {
 
 	}
 
+	/**
+	 * @description This test set flag "forceException" on trigger which cause that NullPointerException is thrown, which cause DmlException.
+	 * This was added to test catch path on Trigger to get 100% coverage. Otherwise it trigger is covered in 33%.
+	 */
+	@isTest
+	private static void test_TestExceptionPath() {
+		AccountTH.forceException = true;
+
+		Account newAccount = new Account();
+
+		Utils.verifyIfCustomNullPointerExceptionWasThrown(newAccount);
+
+	}
+
 }

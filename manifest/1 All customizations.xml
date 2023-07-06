@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+	
+	<!-- Objects -->
+	<types>
+		<members>Lead</members>
+		<members>Account</members>
+		<members>Contact</members>
+		<members>Contract</members>
+		<members>Opportunity</members>
+		<members>Product2</members>
+		<members>User</members>
+		<members>Activity</members>
+		<!-- Custom objects -->
+		<!-- Custom metadata -->
+		<name>CustomObject</name>
+	</types>
+	<!-- Make sure that you have added >Layouts< for selected objects -->
+	<types>
+		<members>Lead-Lead Layout</members>
+		<members>Account-Account Layout</members>
+		<members>Contact-Contact Layout</members>
+		<members>Contract-Contract Layout</members>
+		<members>Opportunity-Opportunity Layout</members>
+		<members>Product2-Product Layout</members>
+		<members>User-User Layout</members>
+		<members>UserAlt-User Profile Layout</members>
+		<members>Global-Global Layout</members>
+		<!-- Custom objects -->
+		<!-- Custom metadata -->
+		<name>Layout</name>
+	</types>
+	<!-- Make sure that you have added >Lightning Record Pages< for selected objects -->
+	<types>
+		<members>Lead_Record_Page</members>
+		<members>Account_Record_Page</members>
+		<members>Contact_Record_Page</members>
+		<members>Contract_Record_Page</members>
+		<members>Opportunity_Record_Page</members>
+		<name>FlexiPage</name>
+	</types>
+	<types>
+		<members>*</members>
+		<name>GlobalValueSet</name>
+	</types>
+	<types>
+		<!-- * is not working. Use exact names -->
+		<members>AccountType</members>
+		<members>Industry</members>
+		<members>LeadStatus</members>
+		<members>OpportunityStage</members>
+		<name>StandardValueSet</name>
+	</types>
+	<types>
+		<members>*</members>
+		<name>ValidationRule</name>
+	</types>
+
+	<types>
+		<members>*</members>
+		<name>PathAssistant</name>
+	</types>
+	
+
+
+	<!-- Lead Conversion settings -->
+	<types>
+		<members>*</members>
+		<name>LeadConvertSettings</name>
+	</types>
+	
+	<!-- Flows -->
+	<types>
+		<members>*</members>
+		<name>Flow</name>
+	</types>
+
+	<!-- Code -->
+	<types>
+		<members>*</members>
+		<name>ApexClass</name>
+	</types>
+	<types>
+		<members>*</members>
+		<name>ApexTrigger</name>
+	</types>
+
+	<!-- Profiles and Permission sets -->
+	<types>
+		<members>Admin</members>
+		<name>Profile</name>
+	</types>
+	<types>
+		<members>*</members>
+		<name>PermissionSet</name>
+	</types>
+	<types>
+		<members>*</members>
+		<name>CustomPermission</name>
+	</types>
+
+	<!-- Application -->
+	<types>
+		<members>standard__Sales</members>
+		<members>standard__LightningSales</members>
+		<members>standard__LightningSalesConsole</members>
+		<name>CustomApplication</name>
+	</types>
+	<types>
+		<members>Sales</members>
+		<name>ContentAsset</name>
+	</types>
+
+	<version>58.0</version>
+</Package>

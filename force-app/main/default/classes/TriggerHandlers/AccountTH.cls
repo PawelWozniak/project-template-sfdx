@@ -7,10 +7,14 @@
 @SuppressWarnings('PMD.EmptyStatementBlock')
 public without sharing class AccountTH extends TriggerHandler {
 
+	@TestVisible
+	private static boolean forceException = false;
+
 	private List<Account> newRecords;
 	private Map<Id, Account> newRecordsMap;
 	private Map<Id, Account> oldRecordsMap;
 
+	/** @description Constructor. On class instantiation fill in class variables with values from Trigger global variable */
 	public AccountTH() {
 		this.newRecords = (List<Account>) Trigger.new;
 		this.newRecordsMap = (Map<Id, Account>) Trigger.newMap;
@@ -20,7 +24,8 @@ public without sharing class AccountTH extends TriggerHandler {
 	/* Before */
 	// Insert. newRecords
 	public override void beforeInsert() {
-
+		// Added for better test coverage of Trigger class. Do not use it for any other purpose.
+		if (forceException == true) { throw new Utils.CustomNullPointerException(); }
 	}
 
 	// Update. newRecords, newRecordsMap, oldRecordsMap

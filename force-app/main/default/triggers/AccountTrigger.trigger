@@ -1,4 +1,4 @@
-trigger AccountTrigger on Account(before insert, before update, after insert, after update, after delete) {
+trigger AccountTrigger on Account(before insert, before update, after insert, after update, after delete) { // NOPMD
 
 	try {
 		new AccountTH().run();

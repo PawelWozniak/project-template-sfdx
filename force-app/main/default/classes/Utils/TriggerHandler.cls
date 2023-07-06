@@ -1,7 +1,7 @@
 @SuppressWarnings('PMD') // Suppressing all PMD warnings as this class can't be written to meet them.
 public virtual class TriggerHandler {
 
-	// static map of handlername, times run() was invoked
+	// static map of handler name, times run() was invoked
 	private static Map<String, LoopCount> loopCountMap;
 	private static Set<String> bypassedHandlers;
 
