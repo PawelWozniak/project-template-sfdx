@@ -7,7 +7,7 @@
 @SuppressWarnings('PMD.ExcessivePublicCount, PMD.CyclomaticComplexity')
 public without sharing class Utils {
 
-	private static Boolean isSandbox = null;
+	private static System.Domain parsedDomain = null;
 	private static Boolean isInAsyncContext = null;
 	private static Boolean canExecuteDebug = null;
 
@@ -15,14 +15,27 @@ public without sharing class Utils {
 
 	/**
 	 * @description Check if current org is Sandbox
-	 * @return true/false
+	 * @return boolean true/false
 	 */
 	public static Boolean isSandbox() {
-		if (isSandbox == null) {
-			isSandbox = [SELECT Id, IsSandbox FROM Organization LIMIT 1].IsSandbox;
+		if (getSandboxName() != null) {
+			return true;
 		}
 
-		return isSandbox;
+		return false;
+	}
+
+	/**
+	 * @description Get current sandbox name, null if it is PROD.
+	 * @documentation https://developer.salesforce.com/docs/atlas.en-us.242.0.apexref.meta/apexref/apex_class_System_Domain.htm#apex_System_Domain_methods
+	 * @return String sandbox name.
+	 */
+	public static String getSandboxName() {
+		if (parsedDomain == null) {
+			parsedDomain = DomainParser.parse(DomainCreator.getOrgMyDomainHostname());
+		}
+
+		return parsedDomain.getSandboxName();
 	}
 
 	/**
@@ -135,6 +148,10 @@ public without sharing class Utils {
 			}
 		}
 
+		if (setOfValues.isEmpty()) {
+			notifyInDebugLog('⚠️Set of Ids for "' + fieldName + '" is empty. [Utils]');
+		}
+
 		return setOfValues;
 	}
 
@@ -173,6 +190,10 @@ public without sharing class Utils {
 			if (String.isNotEmpty(stringFieldValue)) {
 				setOfValues.add(stringFieldValue);
 			}
+		}
+
+		if (setOfValues.isEmpty()) {
+			notifyInDebugLog('⚠️Set of strings for "' + fieldName + '" is empty. [Utils]');
 		}
 
 		return setOfValues;
@@ -239,20 +260,40 @@ public without sharing class Utils {
 		}
 
 		System.Debug('@#@ ex.getTypeName(): ' + ex.getTypeName());
+		System.Debug('@#@ formatException: ' + formatException(ex));
+
 		if (ex.getTypeName() == 'System.DmlException') {
 			for (integer i = 0; i < ex.getNumDML(); i++) {
-				System.Debug('@#@ formatException: ' + formatException(ex));
 				String objectName = '';
+
 				if (ex.getDmlId(i) != null) {
 					objectName = Id.valueOf(ex.getDmlId(i)).getSobjectType().getDescribe().label;
 					formattedMessage += '⚠️Error on ' + objectName + '. ';
 				}
 				else {
 					formattedMessage += '⚠️Error. ';
-				}			 
+				}
+
 				formattedMessage += '👉';
-				formattedMessage += ex.getDmlMessage(i); 
+				formattedMessage += ex.getDmlMessage(i);
 			}
+		}
+		else if (ex.getTypeName() == 'System.SObjectException') {
+			formattedMessage += '👉';
+
+			// Error for missing field in the query
+			if (ex.getMessage().contains('without querying the requested field:')) {
+				formattedMessage += 'Add this field to SOQL query: ';
+				formattedMessage += ex.getMessage().substringAfter('field: ') + ' ';
+			}
+			else {
+				formattedMessage += ex.getMessage();
+			}
+		}
+		// In cae of nullpointer error ask user to send screenshot as he can't do anything to solve it.
+		else if (ex.getTypeName() == 'System.NullPointerException') {
+			formattedMessage += '⚠️There is an issue with backend logic.';
+			formattedMessage += '👉Please provide screenshot of this error and steps to reproduce to Administrator.';
 		}
 
 		formattedMessage += '👈';
@@ -349,6 +390,21 @@ public without sharing class Utils {
 	 *	}
 	 */
 	public class CustomNullPointerException extends Exception {}
+
+	/**
+	 * @description Non invasive way to add custom Exception message
+	 * Use it as:
+	 * 	catch (Exception ex) {
+	 * 		ex.setMessage = Utils.addCustomExMessage(ex, 'Wrong value');
+	 * 		throw ex;
+	 * 	}
+	 */
+
+	public static void addCustomExMessage (Exception ex, String customMessage) {
+		String formattedMessage = ex.getMessage() + '\n';
+		formattedMessage += '⚠️👉' + customMessage + '👈';
+		ex.setMessage(formattedMessage);
+	}
 
 	/****************************** Debug logs ******************************/
 
@@ -451,37 +507,62 @@ public without sharing class Utils {
 	 * Use return result with Nebula Logger to log error in case of failures.
 	 */
 	public static boolean logSuccessAndFailedSaveToDebugLog(List<Database.SaveResult> saveResults, List<sObject> savedRecords) {
+		return logSuccessAndFailedSaveToDebugLog(saveResults, savedRecords, null);
+	}
 
+	/**
+	 * @description Log in debug logs Success and Failed records saves.
+	 * Use with: List<Database.SaveResult> saveResults = Database.update(recordToSave, false);
+	 * @param saveResults List<Database.SaveResult> save results of given list of records
+	 * @param savedRecords List<sObject> List of records which were saved.
+	 * @param showAdditionalFields List<String> List of field API names to be shown in log. Use when you want to see value saved on field.
+	 * @return boolean Were all records saved with success? TRUE - All Succeeded, FALSE - some failed.
+	 * Use return result with Nebula Logger to log error in case of failures.
+	 */
+	public static boolean logSuccessAndFailedSaveToDebugLog(List<Database.SaveResult> saveResults, List<sObject> savedRecords, List<String> showAdditionalFields) {
+
+		List<String> showFields = new List<String> {'Id', 'Name'};
+		String fieldsSeparator = ', ';
 		List<String> saveSuccess = new List<String>();
 		Map<String, List<String>> saveErrors = new Map<String, List<String>>();
 
+		if (showAdditionalFields != null) {
+			showFields.addAll(showAdditionalFields);
+		}
+
 		for (Integer i = 0; i < saveResults.size(); i++) {
 			Database.SaveResult saveRes = saveResults.get(i);
-			Id recordId = savedRecords.get(i).Id;
-			String recordName = '*Missing Record Name*';
-			try {
-				recordName = String.valueOf(savedRecords.get(i).get('Name'));
-			}
-			catch (System.SObjectException ex) {
-				recordName = 'Add >Name< to SOQL query to catch record Name and improve this log.';
+			String recordString = '';
+
+			// Dynamically add fields
+			for (String fieldName : showFields) {
+				recordString += fieldName + ':';
+				try {
+					String fieldValue = String.valueOf(savedRecords.get(i).get(fieldName));
+					recordString += fieldValue;
+				}
+				catch (System.SObjectException ex) {
+					recordString += '*Missing on record*';
+				}
+				recordString += fieldsSeparator;
 			}
 
-			String recordString = recordId + ' ' + '"' + recordName + '"';
+			recordString = recordString.removeEnd(fieldsSeparator);
 
 			if (saveRes.isSuccess()) {
-				String header = '#@# Successfully saved Id: ' + recordString;
-				saveSuccess.add(header);
+				String recordResultsLine = '#@# Successfully saved: ' + recordString;
+				saveSuccess.add(recordResultsLine);
 			}
 			else {
 				List<String> errorsList = new List<String>();
-				String header = '#@# Failed to save Id: ' + recordString;
+				String recordResultsLine = '#@# Failed to save: ' + recordString;
 
 				for (Database.Error err : saveRes.getErrors()) {
 					String errString = 'Errors: ' + err.getStatusCode() + ' - ' + err.getMessage();
 					errorsList.add(errString);
 				}
 
-				saveErrors.put(header, errorsList);
+				saveErrors.put(recordResultsLine, errorsList);
 			}
 		}
 
@@ -503,7 +584,7 @@ public without sharing class Utils {
 	@SuppressWarnings('PMD.AvoidDebugStatements')
 	private static void printSaveResultsInDebugLog(List<String> saveSuccess, Map<String, List<String>> saveErrors) {
 		if (!saveSuccess.isEmpty()) {
-			System.debug(LoggingLevel.INFO, '#@# Records updated with success: ');
+			System.debug(LoggingLevel.INFO, '#@# ✅Records updated with success: ');
 
 			for (String header : saveSuccess) {
 				System.debug(LoggingLevel.INFO, header);
@@ -511,7 +592,7 @@ public without sharing class Utils {
 		}
 
 		if (!saveErrors.isEmpty()) {
-			System.debug(LoggingLevel.INFO, '#@# Those records were not updated because of errors: ');
+			System.debug(LoggingLevel.INFO, '#@# 🔴Those records were not updated because of errors: ');
 
 			for (String header : saveErrors.keySet()) {
 				System.debug(LoggingLevel.INFO, header);
@@ -577,6 +658,36 @@ public without sharing class Utils {
 
 		mail.setPlainTextBody('======== JSON Start =======\n' + JSON.serializePretty(anyObject) + '\n======== JSON End =======' );
 		Messaging.sendEmail(new List<Messaging.SingleEmailMessage> { mail });
+	}
+
+	/**
+	 * @description Verify if proper error was thrown during simulation of trigger issue.
+	 * Use it in test_TestExceptionPath() test cases.
+	 * @param anySObject any single salesforce object for insert.
+	 */
+	@SuppressWarnings('PMD.AvoidDebugStatements')
+	public static void verifyIfCustomNullPointerExceptionWasThrown (sObject anySObject) {
+		Boolean exceptionCatch = false;
+		String exceptionMessage = '';
+		try {
+			insert anySObject;
+		}
+		catch (DmlException e) {
+			if (e.getDmlMessage(0).contains('Utils.CustomNullPointerException')) {
+				exceptionCatch = true;
+			}
+			else {
+				exceptionMessage = e.getMessage();
+				System.debug(LoggingLevel.ERROR, Utils.formatException(e));
+			}
+		}
+		catch (Exception e) {
+			exceptionMessage = e.getMessage();
+			System.debug(LoggingLevel.ERROR, Utils.formatException(e));
+		}
+
+		Assert.isTrue(exceptionCatch, 'Dml CustomNullPointerException exception type should be catch. Actual: 👉' + exceptionMessage + '👈');
+
 	}
 
 	/**

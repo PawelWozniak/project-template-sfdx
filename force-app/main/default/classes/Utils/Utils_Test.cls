@@ -87,17 +87,21 @@ public without sharing class Utils_Test {
 	@isTest
 	@SuppressWarnings('PMD.UnusedLocalVariable')
 	private static void testTriggerException() {
+		Account testAcc = new Account();
+		testAcc.Name = 'TestAcc';
+		insert testAcc;
+
 		// Query exception
 		try {
 			try {
 				Opportunity opp = [SELECT Id, Name FROM Opportunity LIMIT 1];
 			}
 			catch (Exception ex) {
-				throw new Utils.triggerException(ex, '1234');
+				throw new Utils.triggerException(ex, 'QEx1');
 			}
 		}
 		catch (Exception te) {
-			System.assert(te.getMessage().startsWith('**1234** Caused by: System.QueryException: List has no rows for assignment to SObject.'), 'Custom Error should have transaction id.');
+			System.assert(te.getMessage().startsWith('**QEx1** Caused by: System.QueryException: List has no rows for assignment to SObject.'), 'Custom Error should have transaction id.');
 		}
 
 		// DML Exception
@@ -108,12 +112,65 @@ public without sharing class Utils_Test {
 				insert newLead;
 			}
 			catch (Exception ex) {
-				throw new Utils.triggerException(ex, '1234');
+				throw new Utils.triggerException(ex, 'DMLEx1');
 			}
 		}
 		catch (Exception te) {
-			System.assert(te.getMessage().startsWith('**1234** Caused by: System.DmlException: Insert failed.'), 'Custom Error should have transaction id.' + te.getMessage());
+			System.assert(te.getMessage().startsWith('**DMLEx1** Caused by: System.DmlException: Insert failed.'), 'Custom Error should have transaction id.' + te.getMessage());
 		}
+
+		// DML Exception 2
+		try {
+			try {
+				List<Account> accs = [SELECT Id, Name FROM Account LIMIT 10];
+
+				for (Account acc : accs) {
+					acc.BillingCountry = 'NotExistingCountry'; // Assume that you have Country/Territory Picklists active.
+				}
+				update accs;
+			}
+			catch (Exception ex) {
+				throw new Utils.triggerException(ex, 'DMLEx2');
+			}
+		}
+		catch (Exception te) {
+			System.assert(te.getMessage().startsWith('**DMLEx2** Caused by: System.DmlException: Update failed. First exception on row 0 with id'), 'Custom Error should have transaction id.' + te.getMessage());
+		}
+
+		// SObjectException
+		try {
+			try {
+				List<Account> accs = [SELECT Id, Name FROM Account LIMIT 10];
+
+				for (Account acc : accs) {
+					String description = acc.Description;
+				}
+			}
+			catch (Exception ex) {
+				throw new Utils.triggerException(ex, 'SObjEx1');
+			}
+		}
+		catch (Exception te) {
+			System.assert(te.getMessage().startsWith('**SObjEx1** Caused by: System.SObjectException: SObject row was retrieved via SOQL without querying the requested field'), 'Custom Error should have transaction id.' + te.getMessage());
+		}
+
+		// Nullpointer
+		try {
+			try {
+				List<Account> accs = [SELECT Id, Name, Description FROM Account LIMIT 10];
+
+				for (Account acc : accs) {
+					Integer descLength = acc.Description.length();
+				}
+			}
+			catch (Exception ex) {
+				throw new Utils.triggerException(ex, 'NP1');
+			}
+		}
+		catch (Exception te) {
+			System.assert(te.getMessage().startsWith('**NP1** Caused by: System.NullPointerException: Attempt to de-reference a null object.'), 'Custom Error should have transaction id.' + te.getMessage());
+		}
+
 	}
 
 	@isTest
